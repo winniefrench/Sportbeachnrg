@@ -634,13 +634,23 @@ async function loadAll(silent) {
       if (key && travelData[key]) travelData[key] = { recordId:r.id, arrDay:r.fields.ArrDay||'', arrTime:r.fields.ArrTime||'', arrFlight:r.fields.ArrFlight||'', depDay:r.fields.DepDay||'', depTime:r.fields.DepTime||'', depFlight:r.fields.DepFlight||'', transfer:r.fields.Transfer||'', notes:r.fields.Notes||'' };
     });
 
-    if (rsRecs.length === 0 && !silent) {
-      // Seed default resources on first ever load
-      const chunks = [];
-      for (let i=0; i<DEFAULT_RESOURCES.length; i+=10) chunks.push(DEFAULT_RESOURCES.slice(i,i+10));
-      for (const chunk of chunks) {
-        const res = await atReq('Resources', 'POST', { records: chunk.map(r=>({ fields:{ Icon:r.icon, Name:r.name, Desc:r.desc, URL:r.url } })) });
-        res.records.forEach((rec,i) => resources.push({ id:rec.id, ...chunk[i] }));
+    if (rsRecs.length === 0) {
+      // Show defaults immediately
+      resources = DEFAULT_RESOURCES.map((r,i) => ({ id:'default-'+i, ...r }));
+      // Try to seed to Airtable in background (non-blocking)
+      if (!silent) {
+        (async () => {
+          try {
+            const chunks = [];
+            for (let i=0; i<DEFAULT_RESOURCES.length; i+=10) chunks.push(DEFAULT_RESOURCES.slice(i,i+10));
+            let seeded = [];
+            for (const chunk of chunks) {
+              const res = await atReq('Resources', 'POST', { records: chunk.map(r=>({ fields:{ Icon:r.icon, Name:r.name, Desc:r.desc, URL:r.url } })) });
+              if (res.records) seeded = seeded.concat(res.records.map((rec,j) => ({ id:rec.id, ...chunk[j] })));
+            }
+            if (seeded.length > 0) { resources = seeded; renderResources(); }
+          } catch(e) { /* keep in-memory defaults — no Airtable Resources table needed */ }
+        })();
       }
     } else {
       resources = rsRecs.map(r => ({ id:r.id, icon:r.fields.Icon||'🔗', name:r.fields.Name||'', desc:r.fields.Desc||'', url:r.fields.URL||'' }));
@@ -919,8 +929,12 @@ function renderResources() {
 }
 
 async function deleteResource(id) {
-  try { await atReq('Resources','DELETE',null,id); resources=resources.filter(r=>r.id!==id); renderResources(); }
-  catch(e) { showToast('Delete failed: '+e.message,true); }
+  resources = resources.filter(r=>r.id!==id);
+  renderResources();
+  if (id && !String(id).startsWith('default-')) {
+    try { await atReq('Resources','DELETE',null,id); }
+    catch(e) { /* silently ignore — item already removed from view */ }
+  }
 }
 
 function toggleAddResource() {
