@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG — Cannes Lions 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --border: #ececec;
+    --border-faint: #f3f3f3;
+    --bg: #ffffff;
+    --bg-subtle: #fafafa;
+    --text: #111111;
+    --text-muted: #888888;
+    --text-light: #bbbbbb;
+    --row-hover: #f8f8f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .header-left { display: flex; align-items: baseline; gap: 12px; }
+  .header-left h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .header-left span { font-size: 12px; color: var(--text-muted); }
+  .header-right { font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.3px; }
+
+  /* TABS */
+  .tabs-bar {
+    display: flex;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border-faint);
+    gap: 2px;
+    align-items: center;
+  }
+  .tabs-bar .filters-inline {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 6px 0;
+  }
+  .tab-btn {
+    background: none; border: none;
+    color: var(--text-muted);
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    padding: 10px 14px 9px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* FILTERS */
+  .filter-select {
+    font-family: inherit; font-size: 11px; font-weight: 400;
+    color: var(--text-muted); background: var(--bg-subtle);
+    border: 1px solid transparent; border-radius: 5px;
+    padding: 3px 22px 3px 8px; cursor: pointer; outline: none;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%23ccc' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 7px center;
+    transition: all 0.15s;
+  }
+  .filter-select:hover { border-color: var(--border); color: var(--text); }
+  .filter-select:focus { border-color: #aaa; color: var(--text); }
+  .filter-select.active {
+    background-color: var(--text); color: #fff; border-color: var(--text);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%23fff' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; gap: 28px; padding: 10px 32px;
+    background: var(--bg-subtle); border-bottom: 1px solid var(--border); flex-wrap: wrap;
+  }
+  .stat { display: flex; align-items: baseline; gap: 6px; }
+  .stat-num { font-size: 18px; font-weight: 600; line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--text-muted); }
+  .stat-divider { width: 1px; background: var(--border); align-self: stretch; }
+
+  /* TABLE */
+  .table-wrap { padding: 24px 32px 40px; overflow-x: auto; }
+  .table-container {
+    border: 1px solid var(--border-faint);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th {
+    text-align: left; font-size: 11px; font-weight: 500; color: var(--text-muted);
+    padding: 10px 16px; border-bottom: 1px solid var(--border-faint);
+    background: var(--bg-subtle); white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--border-faint); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+  tbody tr.hidden { display: none; }
+  td { padding: 11px 16px; vertical-align: middle; }
+  td.event-name { font-weight: 500; max-width: 260px; }
+  td.notes-cell { color: var(--text-muted); max-width: 200px; }
+
+  [contenteditable] {
+    outline: none; border-radius: 3px; padding: 2px 4px; margin: -2px -4px;
+    transition: background 0.12s; min-width: 20px; display: inline-block;
+  }
+  [contenteditable]:hover { background: #efefef; }
+  [contenteditable]:focus { background: #e8e8e8; box-shadow: 0 0 0 1px #aaa; }
+  [contenteditable]:empty::before { content: attr(data-placeholder); color: var(--text-light); font-style: italic; }
+
+  .cell-select {
+    background: transparent; border: none; color: inherit;
+    font-family: inherit; font-size: 12px; cursor: pointer;
+    padding: 2px 0; appearance: none; -webkit-appearance: none;
+  }
+  .cell-select:focus { outline: none; }
+
+  /* PRIORITY PILLS */
+  .priority-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 500;
+    padding: 3px 10px 3px 8px;
+    border-radius: 20px; white-space: nowrap; line-height: 1.4;
+  }
+  .priority-pill .pill-icon {
+    width: 14px; height: 14px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; flex-shrink: 0; line-height: 1;
+  }
+  .p-must     { background: #fef2f2; color: #b91c1c; }
+  .p-must     .pill-icon { background: #ef4444; color: #fff; }
+  .p-high     { background: #fffbeb; color: #92400e; }
+  .p-high     .pill-icon { background: #f59e0b; color: #fff; }
+  .p-optional { background: #f5f3ff; color: #5b21b6; }
+  .p-optional .pill-icon { background: #a78bfa; color: #fff; }
+  .p-radar    { background: #f9fafb; color: #6b7280; }
+  .p-radar    .pill-icon { background: #e5e7eb; color: #9ca3af; }
+
+  /* STATUS PILLS */
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 500;
+    padding: 3px 10px 3px 8px;
+    border-radius: 20px; white-space: nowrap; line-height: 1.4;
+  }
+  .status-pill .pill-icon {
+    width: 14px; height: 14px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; flex-shrink: 0; line-height: 1;
+  }
+  .s-registered { background: #f0fdf4; color: #15803d; }
+  .s-registered .pill-icon { background: #22c55e; color: #fff; }
+  .s-open       { background: #eff6ff; color: #1d4ed8; }
+  .s-open       .pill-icon { background: #93c5fd; color: #1d4ed8; }
+  .s-not-open   { background: #f9fafb; color: #9ca3af; }
+  .s-not-open   .pill-icon { background: #e5e7eb; color: #9ca3af; }
+  .s-waitlist   { background: #fff7ed; color: #c2410c; }
+  .s-waitlist   .pill-icon { background: #fb923c; color: #fff; }
+  .s-no-reg     { background: #f7fee7; color: #3f6212; }
+  .s-no-reg     .pill-icon { background: #bef264; color: #3f6212; }
+
+  /* ATTENDEE CIRCLES */
+  .attendee-tags { display: flex; gap: 2px; align-items: center; }
+  .att-circle {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; letter-spacing: 0.3px;
+    cursor: pointer; user-select: none;
+    transition: opacity 0.15s, transform 0.1s;
+    color: #fff; flex-shrink: 0;
+    box-shadow: 0 0 0 2px #fff;
+  }
+  .att-circle:hover { transform: scale(1.1); z-index: 1; position: relative; }
+  .att-circle.off { opacity: 0.15; }
+  .att-jon      { background: #ef4444; }
+  .att-fotoulla { background: #3b82f6; }
+  .att-rob      { background: #a855f7; }
+  .att-jay      { background: #eab308; }
+
+  /* ADD / DELETE ROW */
+  .add-row-btn {
+    margin: 12px 32px 40px;
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--text-muted); font-family: inherit; font-size: 12px; font-weight: 500;
+    padding: 8px 18px; cursor: pointer; border-radius: 6px;
+    transition: all 0.15s; display: inline-block;
+  }
+  .add-row-btn:hover { border-color: #aaa; color: var(--text); background: var(--bg-subtle); }
+  td.del-col { width: 28px; padding: 0; text-align: center; }
+  .del-btn {
+    background: none; border: none; color: var(--text-light);
+    cursor: pointer; font-size: 14px; line-height: 1; padding: 2px 6px; border-radius: 2px;
+    transition: all 0.15s; opacity: 0;
+  }
+  .del-btn:hover { color: #cc3333; }
+  tbody tr:hover .del-btn { opacity: 1; }
+
+  /* ── TRAVEL CARDS ─────────────────────────────────────────── */
+  .travel-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 16px; padding: 24px 32px 40px;
+  }
+  .travel-card {
+    background: var(--bg); border: 1px solid var(--border-faint);
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .travel-card-header {
+    padding: 8px 14px; background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border-faint);
+    display: flex; align-items: center; gap: 7px;
+  }
+  .travel-card-header .person-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .travel-card-header h3 { font-size: 12px; font-weight: 600; flex: 1; }
+  .travel-card-header .role { font-size: 11px; color: var(--text-muted); }
+  .travel-edit-btn {
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    font-family: inherit; font-size: 10px; color: var(--text-muted);
+    padding: 2px 8px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .travel-edit-btn:hover { border-color: #aaa; color: var(--text); }
+
+  /* VIEW MODE */
+  .travel-view { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .travel-view-row { display: flex; gap: 16px; }
+  .travel-view-leg { flex: 1; }
+  .travel-leg-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 5px;
+  }
+  .travel-leg-flight { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .travel-leg-detail { font-size: 11px; color: var(--text-muted); }
+  .travel-leg-empty { font-size: 12px; color: var(--text-light); font-style: italic; }
+  .travel-view-divider { height: 1px; background: var(--border); }
+  .travel-view-note { font-size: 11px; color: var(--text-muted); }
+
+  /* EDIT MODE */
+  .travel-edit-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .travel-edit-section-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-light); padding-top: 10px; border-top: 1px solid var(--border);
+  }
+  .travel-edit-section-label.first { border-top: none; padding-top: 0; }
+  .travel-edit-row { display: flex; gap: 8px; }
+  .travel-edit-row .tf { flex: 1; }
+  .tf { display: flex; flex-direction: column; gap: 3px; }
+  .tf label {
+    font-size: 10px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.3px;
+  }
+  .tf select, .tf input {
+    font-family: inherit; font-size: 12px; color: var(--text);
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: 4px; padding: 5px 8px; outline: none; transition: border-color 0.15s;
+    width: 100%;
+  }
+  .tf select:focus, .tf input:focus { border-color: #888; }
+  .tf input::placeholder { color: var(--text-light); }
+
+  /* ── RESOURCES ─────────────────────────────────────────────── */
+  .resources-header {
+    padding: 18px 32px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .resources-header span {
+    font-size: 11px; font-weight: 500; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .add-resource-btn {
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    font-family: inherit; font-size: 11px; color: var(--text-muted);
+    padding: 4px 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .add-resource-btn:hover { border-color: #aaa; color: var(--text); }
+
+  .resource-add-form {
+    margin: 0 32px 12px;
+    padding: 14px 16px;
+    background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 6px;
+    display: none; flex-direction: column; gap: 10px;
+  }
+  .resource-add-form.visible { display: flex; }
+  .resource-add-form-row { display: flex; gap: 8px; }
+  .resource-add-form input {
+    flex: 1; font-family: inherit; font-size: 12px; color: var(--text);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+    padding: 6px 9px; outline: none; transition: border-color 0.15s;
+  }
+  .resource-add-form input:focus { border-color: #888; }
+  .resource-add-form input::placeholder { color: var(--text-light); }
+  .resource-add-form input.emoji-in { width: 56px; flex: none; text-align: center; font-size: 14px; }
+  .resource-form-actions { display: flex; gap: 8px; }
+  .btn-primary {
+    font-family: inherit; font-size: 11px; font-weight: 500;
+    background: var(--text); color: #fff; border: none; border-radius: 4px;
+    padding: 5px 14px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.8; }
+  .btn-cancel {
+    font-family: inherit; font-size: 11px; color: var(--text-muted);
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    padding: 5px 14px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-cancel:hover { border-color: #aaa; color: var(--text); }
+
+  .resources-grid {
+    padding: 0 32px 40px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px;
+  }
+  .resource-card-wrap { position: relative; }
+  .resource-card-wrap:hover .resource-del { opacity: 1; }
+  .resource-del {
+    position: absolute; top: 6px; right: 6px;
+    background: #fff; border: 1px solid var(--border); border-radius: 3px;
+    font-size: 11px; color: var(--text-light); cursor: pointer;
+    padding: 1px 5px; opacity: 0; transition: all 0.15s; line-height: 1.4;
+  }
+  .resource-del:hover { color: #cc3333; border-color: #cc3333; }
+  .resource-card {
+    background: var(--bg-subtle); border: 1px solid var(--border-faint); border-radius: 5px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+    text-decoration: none; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  }
+  .resource-card:hover { border-color: var(--border); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .resource-icon {
+    width: 28px; height: 28px; background: #fff;
+    border: none; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0;
+  }
+  .resource-card h4 { font-size: 12px; font-weight: 500; color: var(--text); }
+  .resource-card p { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  /* ── CALENDAR ──────────────────────────────────────────────── */
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 0 32px 40px; margin-top: 20px; gap: 0;
+  }
+  .cal-day-col { display: flex; flex-direction: column; gap: 6px; }
+  .cal-day-header {
+    text-align: center; padding: 8px 6px 10px;
+    border-bottom: 1px solid var(--border); margin-bottom: 4px;
+  }
+  .cal-day-header .cal-date { font-size: 20px; font-weight: 600; line-height: 1; }
+  .cal-day-header .cal-weekday {
+    font-size: 10px; font-weight: 500; color: var(--text-muted);
+    margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .cal-event-card {
+    background: var(--bg-subtle); border: none;
+    border-radius: 7px;
+    padding: 8px 10px; margin: 0 4px; transition: box-shadow 0.15s, background 0.15s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .cal-event-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.09); background: #fff; }
+  .cal-event-name { font-size: 12.5px; font-weight: 500; line-height: 1.3; margin-bottom: 3px; }
+  .cal-event-time { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .cal-event-type { font-size: 10px; color: var(--text-light); margin-bottom: 4px; }
+  .cal-att-dots { display: flex; gap: 3px; flex-wrap: wrap; }
+  .cal-att-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .cal-empty { text-align: center; padding: 16px 6px; color: var(--text-light); font-size: 11px; font-style: italic; }
+
+  /* TRAVEL CALENDAR CARDS */
+  .cal-travel-card {
+    background: var(--bg-subtle); border: 1px solid var(--border-faint);
+    border-left: 2px solid #d1d5db; border-radius: 5px;
+    padding: 7px 9px; margin: 0 4px;
+  }
+  .cal-travel-type {
+    font-size: 9px; font-weight: 700; color: #9ca3af;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;
+  }
+  .cal-travel-person { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
+  .cal-travel-detail { font-size: 10px; color: var(--text-muted); }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #ccc; }
+</style>
+</head>
+<body>
+<div id="loading-bar" style="position:fixed;top:0;left:0;right:0;height:2px;background:#6366f1;opacity:0;transition:opacity 0.3s;z-index:9999;"></div>
+<div id="toast" style="display:none;position:fixed;bottom:20px;right:20px;background:#111;color:#fff;font-size:12px;font-family:inherit;padding:8px 16px;border-radius:6px;z-index:9998;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Cannes Lions 2026</h1>
+    <span>Sport Beach · June 21–25</span>
+  </div>
+  <div class="header-right">NRG</div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('events', this)">Events</button>
+  <button class="tab-btn" onclick="switchTab('calendar', this)">Calendar</button>
+  <button class="tab-btn" onclick="switchTab('travel', this)">Travel</button>
+  <button class="tab-btn" onclick="switchTab('resources', this)">Resources</button>
+  <div class="filters-inline" id="filters">
+    <select class="filter-select" id="filter-day" onchange="setFilter('day', this.value, this)">
+      <option value="all">All Days</option>
+      <option value="Sun Jun 21">Sun 6/21</option>
+      <option value="Mon Jun 22">Mon 6/22</option>
+      <option value="Tue Jun 23">Tue 6/23</option>
+      <option value="Wed Jun 24">Wed 6/24</option>
+      <option value="Thu Jun 25">Thu 6/25</option>
+    </select>
+    <select class="filter-select" id="filter-person" onchange="setFilter('person', this.value, this)">
+      <option value="all">All People</option>
+      <option value="jon">Jon Penn</option>
+      <option value="fotoulla">Fotoulla</option>
+      <option value="rob">Rob Barrish</option>
+      <option value="jay">Jay Kaufman</option>
+    </select>
+    <select class="filter-select" id="filter-type" onchange="setFilter('type', this.value, this)">
+      <option value="all">All Types</option>
+      <option value="Panel/Session">Panel / Session</option>
+      <option value="Dinner">Dinner</option>
+      <option value="Networking">Networking</option>
+      <option value="Party/Social">Party / Social</option>
+      <option value="Brand Activation">Brand Activation</option>
+      <option value="Sport Beach">Sport Beach</option>
+      <option value="Content Studio">Content Studio</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+</div>
+
+<!-- EVENTS TAB -->
+<div class="tab-panel active" id="tab-events">
+
+  <div class="table-wrap">
+    <div class="table-container">
+      <table id="events-table">
+        <thead>
+          <tr>
+            <th>Event / Session</th>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Attendees</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>Notes</th>
+            <th style="width:28px"></th>
+          </tr>
+        </thead>
+        <tbody id="events-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <button class="add-row-btn" onclick="addRow()">+ Add event</button>
+</div>
+
+<!-- CALENDAR TAB -->
+<div class="tab-panel" id="tab-calendar">
+  <div class="cal-grid" id="cal-grid"></div>
+</div>
+
+<!-- TRAVEL TAB -->
+<div class="tab-panel" id="tab-travel">
+  <div class="travel-grid" id="travel-grid"></div>
+</div>
+
+<!-- RESOURCES TAB -->
+<div class="tab-panel" id="tab-resources">
+  <div class="resources-header">
+    <span>Partner Activations &amp; Event Sites</span>
+    <button class="add-resource-btn" onclick="toggleAddResource()">+ Add site</button>
+  </div>
+  <div class="resource-add-form" id="resource-add-form">
+    <div class="resource-add-form-row">
+      <input class="emoji-in" id="raf-icon" type="text" placeholder="🔗" maxlength="2">
+      <input id="raf-name" type="text" placeholder="Site name" style="flex:2">
+      <input id="raf-desc" type="text" placeholder="Short description">
+    </div>
+    <div class="resource-add-form-row">
+      <input id="raf-url" type="text" placeholder="https://...">
+    </div>
+    <div class="resource-form-actions">
+      <button class="btn-primary" onclick="addResource()">Add</button>
+      <button class="btn-cancel" onclick="toggleAddResource()">Cancel</button>
+    </div>
+  </div>
+  <div class="resources-grid" id="resources-grid"></div>
+</div>
+
+<script>
+// ─── AIRTABLE CONFIG ─────────────────────────────────────────────────────────
+const AT_BASE  = 'appWRPVp0TFCaV4Bi';
+const AT_TOKEN = 'pattgi1sCLkXuvNaT.87420027d923c512f4b6afe8dcf1835b6d395aa2551ca9bb64368db8175c9e6b';
+const AT_URL   = `https://api.airtable.com/v0/${AT_BASE}`;
+
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+const PEOPLE = [
+  { key: 'jon',      label: 'Jon Penn',    initials: 'JP', role: 'CEO', dot: '#fca5a5', dotSolid: '#ef4444', cls: 'att-jon' },
+  { key: 'fotoulla', label: 'Fotoulla D.', initials: 'FD', role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
+  { key: 'rob',      label: 'Rob Barrish', initials: 'RB', role: '',    dot: '#c084fc', dotSolid: '#a855f7', cls: 'att-rob' },
+  { key: 'jay',      label: 'Jay Kaufman', initials: 'JK', role: '',    dot: '#fde047', dotSolid: '#eab308', cls: 'att-jay' },
+];
+
+const DAYS       = ['Sun Jun 21','Mon Jun 22','Tue Jun 23','Wed Jun 24','Thu Jun 25'];
+const TYPES      = ['Panel/Session','Dinner','Networking','Party/Social','Brand Activation','Sport Beach','Content Studio','Other'];
+const PRIORITIES = ['Must Attend','High Priority','Optional','On the Radar'];
+const STATUSES   = ['Registered','Registration Open','Not Yet Open','Waitlisted','No Registration Required'];
+
+const PRIORITY_CLASS = { 'Must Attend':'p-must', 'High Priority':'p-high', 'Optional':'p-optional', 'On the Radar':'p-radar' };
+const STATUS_CLASS   = { 'Registered':'s-registered', 'Registration Open':'s-open', 'Not Yet Open':'s-not-open', 'Waitlisted':'s-waitlist', 'No Registration Required':'s-no-reg' };
+const PRIORITY_ICON  = { 'Must Attend':'!', 'High Priority':'↑', 'Optional':'○', 'On the Radar':'·' };
+const STATUS_ICON    = { 'Registered':'✓', 'Registration Open':'→', 'Not Yet Open':'–', 'Waitlisted':'…', 'No Registration Required':'✦' };
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let events = [];
+let filterDay = 'all', filterPerson = 'all', filterType = 'all';
+
+let travelData = {};
+PEOPLE.forEach(p => { travelData[p.key] = { recordId:null, arrDay:'', arrTime:'', arrFlight:'', depDay:'', depTime:'', depFlight:'', transfer:'', notes:'' }; });
+let travelEditMode = {};
+PEOPLE.forEach(p => { travelEditMode[p.key] = false; });
+
+let resources = [];
+let saveTimers = {};
+
+const DEFAULT_RESOURCES = [
+  { icon:'🏖', name:'Sport Beach',             desc:'Main Sport Beach portal',        url:'https://www.sportbeach.com/' },
+  { icon:'🦁', name:'Cannes Lions Experiences', desc:'Official festival activations',  url:'https://www.canneslions.com/festival/experiences' },
+  { icon:'🎬', name:'Plage 3CV',                desc:'Plage 3CV activation',           url:'https://plage3cv.com/' },
+  { icon:'🅰', name:'Adobe at Cannes',          desc:'Adobe 2026 activation hub',      url:'https://canneslions.adobe.com/2026/home' },
+  { icon:'📰', name:'Adweek House Cannes',      desc:'Adweek 2026 event',              url:'https://event.adweek.com/awh-cannes-2026' },
+  { icon:'📦', name:'Amazon @ Cannes',          desc:'Amazon partner activation',      url:'https://www.canneslions.com/partnerships/our-partners/amazon' },
+  { icon:'🎨', name:'Canva at Cannes',          desc:'Canva event hub',                url:'https://www.canva.com/events/cannes/' },
+  { icon:'🏢', name:'DEPT Agency',              desc:'DEPT Cannes Lions 2026',         url:'https://www.deptagency.com/event/cannes-lions-2026/' },
+  { icon:'📊', name:'Infillion @ Cannes',       desc:'Infillion partner page',         url:'https://www.canneslions.com/partnerships/our-partners/infillion' },
+  { icon:'💼', name:'LinkedIn at Cannes',       desc:'LinkedIn activation 2026',       url:'https://linkedinatcanneslions2026.splashthat.com/' },
+  { icon:'🤖', name:'Monks',                    desc:'Monks Cannes 2026',              url:'https://www.monks.com/cannes-lions-2026' },
+  { icon:'🪟', name:'Microsoft at Cannes',      desc:'Microsoft Cannes 2026 event',    url:'https://reg.3p.microsoft.com/flow/microsoft/cannes26/landingpage/page/eventlandingpage' },
+  { icon:'📈', name:'FT Live Cannes',           desc:'Financial Times at Cannes',      url:'https://ftcannes.live.ft.com/' },
+  { icon:'📌', name:'Pinterest at Cannes',      desc:'Pinterest activation hub',       url:'https://pinterestcannes.com/' },
+  { icon:'📡', name:'RTL Beach',                desc:'RTL Ad Alliance beach event',    url:'https://rtl-adalliance.com/rtlbeach' },
+  { icon:'☁',  name:'Salesforce at Cannes',     desc:'Salesforce Cannes 2026',         url:'https://www.salesforce.com/events/cannes/' },
+  { icon:'♀',  name:'The Female Quotient',      desc:'TFQ Cannes Lions 2026',          url:'https://events.thefemalequotient.com/canneslions26/cl' },
+  { icon:'🎵', name:'TikTok at Cannes',         desc:'TikTok activation 2026',         url:'https://www.tiktokatcannes.com/' },
+];
+
+const EV_FIELD_MAP = { name:'Name', day:'Day', time:'Time', type:'Type', location:'Location', notes:'Notes', priority:'Priority', status:'Status' };
+const TR_FIELD_MAP = { arrDay:'ArrDay', arrTime:'ArrTime', arrFlight:'ArrFlight', depDay:'DepDay', depTime:'DepTime', depFlight:'DepFlight', transfer:'Transfer', notes:'Notes' };
+
+// ─── AIRTABLE UTILS ──────────────────────────────────────────────────────────
+async function atReq(table, method, body, recordId) {
+  const url = `${AT_URL}/${encodeURIComponent(table)}${recordId ? '/'+recordId : ''}`;
+  const res = await fetch(url, {
+    method: method || 'GET',
+    headers: { 'Authorization': `Bearer ${AT_TOKEN}`, 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error?.message || `HTTP ${res.status}`); }
+  return res.json();
+}
+
+async function atGetAll(table) {
+  let all = [], offset;
+  do {
+    const url = `${AT_URL}/${encodeURIComponent(table)}${offset ? '?offset='+encodeURIComponent(offset) : ''}`;
+    const data = await fetch(url, { headers:{ 'Authorization': `Bearer ${AT_TOKEN}` } }).then(r=>r.json());
+    if (data.error) throw new Error(data.error.message || 'Airtable error');
+    all = all.concat(data.records || []);
+    offset = data.offset;
+  } while (offset);
+  return all;
+}
+
+// ─── LOADING / TOAST ─────────────────────────────────────────────────────────
+function showLoading(show) {
+  document.getElementById('loading-bar').style.opacity = show ? '1' : '0';
+}
+let toastTimer;
+function showToast(msg, isError) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = isError ? '#c0392b' : '#222';
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+// ─── LOAD DATA ───────────────────────────────────────────────────────────────
+async function loadAll(silent) {
+  if (!silent) showLoading(true);
+  try {
+    const [evRecs, trRecs, rsRecs] = await Promise.all([
+      atGetAll('Events'), atGetAll('Travel'), atGetAll('Resources')
+    ]);
+
+    events = evRecs.map(r => ({
+      id:        r.id,
+      name:      r.fields.Name      || '',
+      day:       r.fields.Day       || 'Mon Jun 22',
+      time:      r.fields.Time      || '',
+      type:      r.fields.Type      || 'Panel/Session',
+      attendees: r.fields.Attendees ? r.fields.Attendees.split(',').map(s=>s.trim()).filter(Boolean) : [],
+      priority:  r.fields.Priority  || 'On the Radar',
+      status:    r.fields.Status    || 'Not Yet Open',
+      location:  r.fields.Location  || '',
+      notes:     r.fields.Notes     || '',
+    }));
+
+    PEOPLE.forEach(p => { travelData[p.key] = { recordId:null, arrDay:'', arrTime:'', arrFlight:'', depDay:'', depTime:'', depFlight:'', transfer:'', notes:'' }; });
+    trRecs.forEach(r => {
+      const key = r.fields.Person;
+      if (key && travelData[key]) travelData[key] = { recordId:r.id, arrDay:r.fields.ArrDay||'', arrTime:r.fields.ArrTime||'', arrFlight:r.fields.ArrFlight||'', depDay:r.fields.DepDay||'', depTime:r.fields.DepTime||'', depFlight:r.fields.DepFlight||'', transfer:r.fields.Transfer||'', notes:r.fields.Notes||'' };
+    });
+
+    if (rsRecs.length === 0 && !silent) {
+      // Seed default resources on first ever load
+      const chunks = [];
+      for (let i=0; i<DEFAULT_RESOURCES.length; i+=10) chunks.push(DEFAULT_RESOURCES.slice(i,i+10));
+      for (const chunk of chunks) {
+        const res = await atReq('Resources', 'POST', { records: chunk.map(r=>({ fields:{ Icon:r.icon, Name:r.name, Desc:r.desc, URL:r.url } })) });
+        res.records.forEach((rec,i) => resources.push({ id:rec.id, ...chunk[i] }));
+      }
+    } else {
+      resources = rsRecs.map(r => ({ id:r.id, icon:r.fields.Icon||'🔗', name:r.fields.Name||'', desc:r.fields.Desc||'', url:r.fields.URL||'' }));
+    }
+
+    renderAll();
+  } catch(e) {
+    showToast('Could not load data — check your connection', true);
+    document.getElementById('events-tbody').innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--text-light)">Failed to connect to Airtable</td></tr>';
+  } finally {
+    showLoading(false);
+  }
+}
+
+function renderAll() { renderEvents(); renderTravel(); renderResources(); }
+
+// Auto-refresh every 30s (skip if user is actively editing)
+setInterval(() => {
+  const a = document.activeElement;
+  if (a && (a.contentEditable==='true' || a.tagName==='INPUT' || a.tagName==='SELECT')) return;
+  loadAll(true);
+}, 30000);
+
+// ─── EVENTS ──────────────────────────────────────────────────────────────────
+function renderEvents() {
+  const tbody = document.getElementById('events-tbody');
+  tbody.innerHTML = '';
+  let vis=0, reg=0, must=0, open=0;
+
+  events.forEach(ev => {
+    const show = matchesFilter(ev);
+    if (show) { vis++; if(ev.status==='Registered')reg++; if(ev.priority==='Must Attend')must++; if(ev.status==='Registration Open')open++; }
+
+    const tr = document.createElement('tr');
+    if (!show) tr.classList.add('hidden');
+
+    const attHtml = PEOPLE.map(p => {
+      const on = ev.attendees.includes(p.key);
+      return `<span class="att-circle att-${p.key}${on?'':' off'}" title="${p.label}" onclick="toggleAtt('${ev.id}','${p.key}',this)">${p.initials}</span>`;
+    }).join('');
+
+    const dayOpts      = DAYS.map(d=>`<option${ev.day===d?' selected':''}>${d}</option>`).join('');
+    const typeOpts     = TYPES.map(t=>`<option${ev.type===t?' selected':''}>${t}</option>`).join('');
+    const priorityOpts = PRIORITIES.map(p=>`<option${ev.priority===p?' selected':''}>${p}</option>`).join('');
+    const statusOpts   = STATUSES.map(s=>`<option${ev.status===s?' selected':''}>${s}</option>`).join('');
+    const id = ev.id;
+
+    tr.innerHTML = `
+      <td class="event-name"><span contenteditable="true" data-placeholder="Event name" onblur="updateField('${id}','name',this.textContent.trim())">${escHtml(ev.name)}</span></td>
+      <td><select class="cell-select" onchange="updateField('${id}','day',this.value)">${dayOpts}</select></td>
+      <td><span contenteditable="true" data-placeholder="00:00 AM" onblur="updateField('${id}','time',this.textContent.trim())">${escHtml(ev.time)}</span></td>
+      <td><select class="cell-select" onchange="updateField('${id}','type',this.value)">${typeOpts}</select></td>
+      <td><div class="attendee-tags">${attHtml}</div></td>
+      <td><span class="priority-pill ${PRIORITY_CLASS[ev.priority]||'p-radar'}"><span class="pill-icon">${PRIORITY_ICON[ev.priority]||'·'}</span><select class="cell-select" style="color:inherit;font-size:11.5px;font-weight:500;background:transparent" onchange="updatePriority('${id}',this.value,this)">${priorityOpts}</select></span></td>
+      <td><span class="status-pill ${STATUS_CLASS[ev.status]||'s-not-open'}"><span class="pill-icon">${STATUS_ICON[ev.status]||'·'}</span><select class="cell-select" style="color:inherit;font-size:11.5px;font-weight:500;background:transparent" onchange="updateStatus('${id}',this.value,this)">${statusOpts}</select></span></td>
+      <td><span contenteditable="true" data-placeholder="Location..." onblur="updateField('${id}','location',this.textContent.trim())">${escHtml(ev.location||'')}</span></td>
+      <td class="notes-cell"><span contenteditable="true" data-placeholder="Notes..." onblur="updateField('${id}','notes',this.textContent.trim())">${escHtml(ev.notes)}</span></td>
+      <td class="del-col"><button class="del-btn" onclick="deleteRow('${id}')">×</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  renderCalendar();
+}
+
+function matchesFilter(ev) {
+  if (filterDay !== 'all' && ev.day !== filterDay) return false;
+  if (filterPerson !== 'all' && !ev.attendees.includes(filterPerson)) return false;
+  if (filterType !== 'all' && ev.type !== filterType) return false;
+  return true;
+}
+
+async function updateField(id, field, val) {
+  const ev = events.find(e=>e.id===id);
+  if (!ev || ev[field]===val) return;
+  ev[field] = val;
+  renderEvents();
+  const tKey = `ev-${id}-${field}`;
+  clearTimeout(saveTimers[tKey]);
+  saveTimers[tKey] = setTimeout(async () => {
+    try { const f=EV_FIELD_MAP[field]; if(f) await atReq('Events','PATCH',{fields:{[f]:val}},id); }
+    catch(e) { showToast('Save failed',true); }
+  }, 600);
+}
+async function updatePriority(id, val, el) {
+  const ev = events.find(e=>e.id===id);
+  if (!ev) return; ev.priority=val;
+  const pill = el.closest('.priority-pill');
+  pill.className=`priority-pill ${PRIORITY_CLASS[val]||'p-radar'}`;
+  pill.querySelector('.pill-icon').textContent = PRIORITY_ICON[val]||'·';
+  try { await atReq('Events','PATCH',{fields:{Priority:val}},id); } catch(e) { showToast('Save failed',true); }
+  renderEvents();
+}
+async function updateStatus(id, val, el) {
+  const ev = events.find(e=>e.id===id);
+  if (!ev) return; ev.status=val;
+  const pill = el.closest('.status-pill');
+  pill.className=`status-pill ${STATUS_CLASS[val]||'s-not-open'}`;
+  pill.querySelector('.pill-icon').textContent = STATUS_ICON[val]||'·';
+  try { await atReq('Events','PATCH',{fields:{Status:val}},id); } catch(e) { showToast('Save failed',true); }
+  renderEvents();
+}
+async function toggleAtt(id, key, el) {
+  const ev = events.find(e=>e.id===id);
+  if (!ev) return;
+  const i = ev.attendees.indexOf(key);
+  if (i===-1) ev.attendees.push(key); else ev.attendees.splice(i,1);
+  el.classList.toggle('off');
+  try { await atReq('Events','PATCH',{fields:{Attendees:ev.attendees.join(',')}},id); } catch(e) { showToast('Save failed',true); }
+}
+async function addRow() {
+  showLoading(true);
+  try {
+    const res = await atReq('Events','POST',{fields:{Name:'',Day:'Mon Jun 22',Time:'',Type:'Panel/Session',Attendees:'',Priority:'On the Radar',Status:'Not Yet Open',Location:'',Notes:''}});
+    events.push({id:res.id,name:'',day:'Mon Jun 22',time:'',type:'Panel/Session',attendees:[],priority:'On the Radar',status:'Not Yet Open',location:'',notes:''});
+    filterDay='all'; filterPerson='all'; filterType='all';
+    resetFilterChips(); renderEvents();
+    setTimeout(()=>{ const rows=document.querySelectorAll('#events-tbody tr'); if(rows.length){ const ce=rows[rows.length-1].querySelector('[contenteditable]'); if(ce)ce.focus(); } },50);
+  } catch(e) { showToast('Could not add row: '+e.message,true); }
+  finally { showLoading(false); }
+}
+async function deleteRow(id) {
+  try { await atReq('Events','DELETE',null,id); events=events.filter(e=>e.id!==id); renderEvents(); }
+  catch(e) { showToast('Delete failed: '+e.message,true); }
+}
+
+// ─── FILTERS ─────────────────────────────────────────────────────────────────
+function setFilter(dim, val, sel) {
+  if(dim==='day') filterDay=val; else if(dim==='person') filterPerson=val; else filterType=val;
+  sel.classList.toggle('active', val !== 'all');
+  renderEvents();   // also calls renderCalendar internally
+  renderTravel();
+}
+function resetFilterChips() {
+  ['filter-day','filter-person','filter-type'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = 'all'; el.classList.remove('active'); }
+  });
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  const showFilters = name === 'events' || name === 'calendar';
+  document.getElementById('filters').style.display = showFilters ? 'flex' : 'none';
+}
+
+// ─── TRAVEL ──────────────────────────────────────────────────────────────────
+async function updateTravel(key, field, val) {
+  travelData[key][field] = val;
+  renderCalendar();
+  const d = travelData[key];
+  if (!d.recordId) {
+    try { const res=await atReq('Travel','POST',{fields:{Person:key}}); d.recordId=res.id; }
+    catch(e) { showToast('Save failed',true); return; }
+  }
+  const tKey = `tr-${key}-${field}`;
+  clearTimeout(saveTimers[tKey]);
+  saveTimers[tKey] = setTimeout(async () => {
+    try { const f=TR_FIELD_MAP[field]; if(f) await atReq('Travel','PATCH',{fields:{[f]:val}},d.recordId); }
+    catch(e) { showToast('Save failed',true); }
+  }, 600);
+}
+
+function toggleTravelEdit(key) {
+  travelEditMode[key] = !travelEditMode[key];
+  renderTravel();
+}
+
+function renderTravel() {
+  const grid = document.getElementById('travel-grid');
+  grid.innerHTML = '';
+
+  const visiblePeople = filterPerson === 'all' ? PEOPLE : PEOPLE.filter(p => p.key === filterPerson);
+  const cols = visiblePeople.length === 1 ? 1 : 2;
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+  visiblePeople.forEach(p => {
+    const d = travelData[p.key];
+    const editMode = travelEditMode[p.key];
+    const card = document.createElement('div');
+    card.className = 'travel-card';
+
+    const headerHtml = `
+      <div class="travel-card-header">
+        <span class="person-dot" style="background:${p.dotSolid}"></span>
+        <h3>${p.label}</h3>
+        <button class="travel-edit-btn" onclick="toggleTravelEdit('${p.key}')">${editMode ? 'Done' : 'Edit'}</button>
+      </div>`;
+
+    if (editMode) {
+      const dayOpts = ['', ...DAYS].map(day =>
+        `<option value="${day}"${day===d.arrDay?' selected':''}>${day||'—'}</option>`
+      ).join('');
+      const depDayOpts = ['', ...DAYS].map(day =>
+        `<option value="${day}"${day===d.depDay?' selected':''}>${day||'—'}</option>`
+      ).join('');
+
+      card.innerHTML = headerHtml + `
+        <div class="travel-edit-body">
+          <div class="travel-edit-section-label first">✈ Arrival</div>
+          <div class="travel-edit-row">
+            <div class="tf"><label>Day</label><select onchange="updateTravel('${p.key}','arrDay',this.value)">${dayOpts}</select></div>
+            <div class="tf"><label>Time</label><input type="text" placeholder="e.g. 2:30 PM" value="${escHtml(d.arrTime)}" onchange="updateTravel('${p.key}','arrTime',this.value)"></div>
+          </div>
+          <div class="tf"><label>Flight #</label><input type="text" placeholder="e.g. AA 123" value="${escHtml(d.arrFlight)}" onchange="updateTravel('${p.key}','arrFlight',this.value)"></div>
+          <div class="travel-edit-section-label">✈ Departure</div>
+          <div class="travel-edit-row">
+            <div class="tf"><label>Day</label><select onchange="updateTravel('${p.key}','depDay',this.value)">${depDayOpts}</select></div>
+            <div class="tf"><label>Time</label><input type="text" placeholder="e.g. 8:00 AM" value="${escHtml(d.depTime)}" onchange="updateTravel('${p.key}','depTime',this.value)"></div>
+          </div>
+          <div class="tf"><label>Flight #</label><input type="text" placeholder="e.g. UA 456" value="${escHtml(d.depFlight)}" onchange="updateTravel('${p.key}','depFlight',this.value)"></div>
+          <div class="travel-edit-section-label">Details</div>
+          <div class="tf"><label>Airport / Transfer</label><input type="text" placeholder="e.g. NCE → Nice Côte d'Azur" value="${escHtml(d.transfer)}" onchange="updateTravel('${p.key}','transfer',this.value)"></div>
+          <div class="tf"><label>Notes</label><input type="text" placeholder="Any other travel notes..." value="${escHtml(d.notes)}" onchange="updateTravel('${p.key}','notes',this.value)"></div>
+        </div>`;
+    } else {
+      const hasArr = d.arrDay || d.arrTime || d.arrFlight;
+      const hasDep = d.depDay || d.depTime || d.depFlight;
+
+      const arrHtml = hasArr
+        ? `<div class="travel-leg-flight">${d.arrFlight || '—'}</div>
+           <div class="travel-leg-detail">${[d.arrDay, d.arrTime].filter(Boolean).join(' · ') || '—'}</div>`
+        : `<div class="travel-leg-empty">Not set</div>`;
+
+      const depHtml = hasDep
+        ? `<div class="travel-leg-flight">${d.depFlight || '—'}</div>
+           <div class="travel-leg-detail">${[d.depDay, d.depTime].filter(Boolean).join(' · ') || '—'}</div>`
+        : `<div class="travel-leg-empty">Not set</div>`;
+
+      const detailHtml = (d.transfer || d.notes)
+        ? `<div class="travel-view-divider"></div>
+           ${d.transfer ? `<div class="travel-view-note">✈ ${escHtml(d.transfer)}</div>` : ''}
+           ${d.notes    ? `<div class="travel-view-note" style="color:var(--text-light)">${escHtml(d.notes)}</div>` : ''}`
+        : '';
+
+      card.innerHTML = headerHtml + `
+        <div class="travel-view">
+          <div class="travel-view-row">
+            <div class="travel-view-leg">
+              <div class="travel-leg-label">Arriving</div>
+              ${arrHtml}
+            </div>
+            <div class="travel-view-leg">
+              <div class="travel-leg-label">Departing</div>
+              ${depHtml}
+            </div>
+          </div>
+          ${detailHtml}
+        </div>`;
+    }
+
+    grid.appendChild(card);
+  });
+}
+
+// ─── RESOURCES ────────────────────────────────────────────────────────────────
+function renderResources() {
+  const grid = document.getElementById('resources-grid');
+  grid.innerHTML = '';
+  resources.forEach(r => {
+    const wrap = document.createElement('div');
+    wrap.className = 'resource-card-wrap';
+    wrap.innerHTML = `
+      <a class="resource-card" href="${escHtml(r.url)}" target="_blank">
+        <div class="resource-icon">${r.icon}</div>
+        <div><h4>${escHtml(r.name)}</h4><p>${escHtml(r.desc)}</p></div>
+      </a>
+      <button class="resource-del" onclick="deleteResource('${r.id}')" title="Remove">×</button>
+    `;
+    grid.appendChild(wrap);
+  });
+}
+
+async function deleteResource(id) {
+  try { await atReq('Resources','DELETE',null,id); resources=resources.filter(r=>r.id!==id); renderResources(); }
+  catch(e) { showToast('Delete failed: '+e.message,true); }
+}
+
+function toggleAddResource() {
+  const form = document.getElementById('resource-add-form');
+  form.classList.toggle('visible');
+  if (form.classList.contains('visible')) document.getElementById('raf-name').focus();
+}
+
+async function addResource() {
+  const icon = document.getElementById('raf-icon').value.trim() || '🔗';
+  const name = document.getElementById('raf-name').value.trim();
+  const desc = document.getElementById('raf-desc').value.trim();
+  const url  = document.getElementById('raf-url').value.trim();
+  if (!name || !url) { alert('Please enter a name and URL.'); return; }
+  showLoading(true);
+  try {
+    const res = await atReq('Resources','POST',{fields:{Icon:icon,Name:name,Desc:desc,URL:url}});
+    resources.push({id:res.id,icon,name,desc,url});
+    renderResources();
+    ['raf-icon','raf-name','raf-desc','raf-url'].forEach(id=>document.getElementById(id).value='');
+    toggleAddResource();
+  } catch(e) { showToast('Could not add resource: '+e.message,true); }
+  finally { showLoading(false); }
+}
+
+// ─── CALENDAR ────────────────────────────────────────────────────────────────
+const PERSON_COLORS   = { jon:'#ef4444', fotoulla:'#3b82f6', rob:'#a855f7', jay:'#eab308' };
+const PERSON_INITIALS = { jon:'JP', fotoulla:'FD', rob:'RB', jay:'JK' };
+
+function renderCalendar() {
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  const activeDays = filterDay === 'all' ? DAYS : [filterDay];
+  const cols = activeDays.length;
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+  activeDays.forEach(day => {
+    const col = document.createElement('div');
+    col.className = 'cal-day-col';
+    const parts = day.split(' ');
+    col.innerHTML = `<div class="cal-day-header"><div class="cal-date">${parts[2]}</div><div class="cal-weekday">${parts[0]} · Jun</div></div>`;
+
+    // Travel cards — respect person filter
+    PEOPLE.forEach(p => {
+      if (filterPerson !== 'all' && filterPerson !== p.key) return;
+      const d = travelData[p.key];
+      if (d.arrDay === day) {
+        const c = document.createElement('div');
+        c.className = 'cal-travel-card';
+        c.innerHTML = `<div class="cal-travel-type">✈ Arriving</div>
+          <div class="cal-travel-person" style="color:${PERSON_COLORS[p.key]}">${p.label}</div>
+          ${d.arrFlight ? `<div class="cal-travel-detail">${escHtml(d.arrFlight)}</div>` : ''}
+          ${d.arrTime   ? `<div class="cal-travel-detail">${escHtml(d.arrTime)}</div>`   : ''}`;
+        col.appendChild(c);
+      }
+      if (d.depDay === day) {
+        const c = document.createElement('div');
+        c.className = 'cal-travel-card';
+        c.innerHTML = `<div class="cal-travel-type">✈ Departing</div>
+          <div class="cal-travel-person" style="color:${PERSON_COLORS[p.key]}">${p.label}</div>
+          ${d.depFlight ? `<div class="cal-travel-detail">${escHtml(d.depFlight)}</div>` : ''}
+          ${d.depTime   ? `<div class="cal-travel-detail">${escHtml(d.depTime)}</div>`   : ''}`;
+        col.appendChild(c);
+      }
+    });
+
+    // Event cards — respect all three filters
+    const dayEvents = events
+      .filter(ev => {
+        if (ev.day !== day) return false;
+        if (filterPerson !== 'all' && !ev.attendees.includes(filterPerson)) return false;
+        if (filterType !== 'all' && ev.type !== filterType) return false;
+        return true;
+      })
+      .sort((a,b) => {
+        const t = s => { if(!s)return 9999; const m=s.match(/(\d+):(\d+)\s*(AM|PM)/i); if(!m)return 9999; let h=parseInt(m[1]),mn=parseInt(m[2]); if(m[3].toUpperCase()==='PM'&&h!==12)h+=12; if(m[3].toUpperCase()==='AM'&&h===12)h=0; return h*60+mn; };
+        return t(a.time)-t(b.time);
+      });
+
+    const travelCount = col.querySelectorAll('.cal-travel-card').length;
+    if (dayEvents.length===0 && travelCount===0) {
+      col.innerHTML += `<div class="cal-empty">No events</div>`;
+    } else {
+      dayEvents.forEach(ev => {
+        const dots = ev.attendees.map(k=>`<span class="cal-att-dot" style="background:${PERSON_COLORS[k]||'#ccc'}" title="${PEOPLE.find(p=>p.key===k)?.label||k}">${PERSON_INITIALS[k]||'?'}</span>`).join('');
+        const c = document.createElement('div');
+        c.className = `cal-event-card ${PRIORITY_CLASS[ev.priority]||'p-radar'}`;
+        c.innerHTML = `<div class="cal-event-name">${escHtml(ev.name)||'<em style="color:#ccc">Untitled</em>'}</div>
+          ${ev.time?`<div class="cal-event-time">${escHtml(ev.time)}</div>`:''}
+          <div class="cal-event-type">${escHtml(ev.type)}</div>
+          <div class="cal-att-dots">${dots}</div>`;
+        col.appendChild(c);
+      });
+    }
+
+    grid.appendChild(col);
+  });
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadAll();
+</script>
+</body>
+</html>
