@@ -107,19 +107,19 @@
     overflow: hidden;
     box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
   thead th {
-    text-align: left; font-size: 11px; font-weight: 500; color: var(--text-muted);
-    padding: 10px 16px; border-bottom: 1px solid var(--border-faint);
+    text-align: left; font-size: 10.5px; font-weight: 500; color: var(--text-muted);
+    padding: 8px 12px; border-bottom: 1px solid var(--border-faint);
     background: var(--bg-subtle); white-space: nowrap;
   }
   tbody tr { border-bottom: 1px solid var(--border-faint); transition: background 0.1s; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--row-hover); }
   tbody tr.hidden { display: none; }
-  td { padding: 11px 16px; vertical-align: middle; }
-  td.event-name { font-weight: 500; max-width: 260px; }
-  td.notes-cell { color: var(--text-muted); max-width: 200px; }
+  td { padding: 9px 12px; vertical-align: middle; }
+  td.event-name { font-weight: 500; max-width: 240px; }
+  td.notes-cell { color: var(--text-muted); max-width: 180px; }
 
   [contenteditable] {
     outline: none; border-radius: 3px; padding: 2px 4px; margin: -2px -4px;
@@ -131,16 +131,16 @@
 
   .cell-select {
     background: transparent; border: none; color: inherit;
-    font-family: inherit; font-size: 12px; cursor: pointer;
+    font-family: inherit; font-size: 11px; cursor: pointer;
     padding: 2px 0; appearance: none; -webkit-appearance: none;
   }
   .cell-select:focus { outline: none; }
 
   /* PRIORITY PILLS */
   .priority-pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 11.5px; font-weight: 500;
-    padding: 3px 10px 3px 8px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 500;
+    padding: 2px 9px 2px 7px;
     border-radius: 20px; white-space: nowrap; line-height: 1.4;
   }
   .priority-pill .pill-icon {
@@ -159,9 +159,9 @@
 
   /* STATUS PILLS */
   .status-pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 11.5px; font-weight: 500;
-    padding: 3px 10px 3px 8px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 500;
+    padding: 2px 9px 2px 7px;
     border-radius: 20px; white-space: nowrap; line-height: 1.4;
   }
   .status-pill .pill-icon {
@@ -181,12 +181,13 @@
   .s-no-reg     .pill-icon { background: #bef264; color: #3f6212; }
 
   /* ATTENDEE CIRCLES */
-  .attendee-tags { display: flex; gap: 2px; align-items: center; }
+  .attendee-tags { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; }
   .att-circle {
-    width: 24px; height: 24px; border-radius: 50%;
+    height: 24px; width: auto; border-radius: 12px;
+    padding: 0 9px;
     display: inline-flex; align-items: center; justify-content: center;
-    font-size: 8px; font-weight: 700; letter-spacing: 0.3px;
-    cursor: pointer; user-select: none;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1px;
+    cursor: pointer; user-select: none; white-space: nowrap;
     transition: opacity 0.15s, transform 0.1s;
     color: #fff; flex-shrink: 0;
     box-shadow: 0 0 0 2px #fff;
@@ -197,6 +198,7 @@
   .att-fotoulla { background: #3b82f6; }
   .att-rob      { background: #a855f7; }
   .att-jay      { background: #eab308; }
+  .att-client   { background: #d97706; }
 
   /* ADD / DELETE ROW */
   .add-row-btn {
@@ -377,9 +379,10 @@
   .cal-event-type { font-size: 10px; color: var(--text-light); margin-bottom: 4px; }
   .cal-att-dots { display: flex; gap: 3px; flex-wrap: wrap; }
   .cal-att-dot {
-    width: 16px; height: 16px; border-radius: 50%;
+    height: 16px; width: auto; border-radius: 8px;
+    padding: 0 6px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 8px; font-weight: 700; color: #fff; flex-shrink: 0;
+    font-size: 8px; font-weight: 600; color: #fff; flex-shrink: 0; white-space: nowrap;
   }
   .cal-empty { text-align: center; padding: 16px 6px; color: var(--text-light); font-size: 11px; font-style: italic; }
 
@@ -517,10 +520,11 @@ const AT_URL   = `https://api.airtable.com/v0/${AT_BASE}`;
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const PEOPLE = [
-  { key: 'jon',      label: 'Jon Penn',    initials: 'JP', role: 'CEO', dot: '#fca5a5', dotSolid: '#ef4444', cls: 'att-jon' },
-  { key: 'fotoulla', label: 'Fotoulla D.', initials: 'FD', role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
-  { key: 'rob',      label: 'Rob Barrish', initials: 'RB', role: '',    dot: '#c084fc', dotSolid: '#a855f7', cls: 'att-rob' },
-  { key: 'jay',      label: 'Jay Kaufman', initials: 'JK', role: '',    dot: '#fde047', dotSolid: '#eab308', cls: 'att-jay' },
+  { key: 'jon',      label: 'Jon Penn',    initials: 'Jon',       role: 'CEO', dot: '#fca5a5', dotSolid: '#ef4444', cls: 'att-jon' },
+  { key: 'fotoulla', label: 'Fotoulla D.', initials: 'Fotoulla',  role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
+  { key: 'rob',      label: 'Rob Barrish', initials: 'Rob',       role: '',    dot: '#c084fc', dotSolid: '#a855f7', cls: 'att-rob' },
+  { key: 'jay',      label: 'Jay Kaufman', initials: 'Jay',       role: '',    dot: '#fde047', dotSolid: '#eab308', cls: 'att-jay' },
+  { key: 'client',   label: 'Client',      initials: 'Client(s)', role: '',    dot: '#fcd34d', dotSolid: '#d97706', cls: 'att-client', isClient: true },
 ];
 
 const DAYS       = ['Sun Jun 21','Mon Jun 22','Tue Jun 23','Wed Jun 24','Thu Jun 25'];
@@ -611,9 +615,11 @@ function showToast(msg, isError) {
 async function loadAll(silent) {
   if (!silent) showLoading(true);
   try {
-    const [evRecs, trRecs, rsRecs] = await Promise.all([
-      atGetAll('Events'), atGetAll('Travel'), atGetAll('Resources')
+    const [evRecs, trRecs] = await Promise.all([
+      atGetAll('Events'), atGetAll('Travel')
     ]);
+    let rsRecs = [];
+    try { rsRecs = await atGetAll('Resources'); } catch(e) { /* Resources table optional */ }
 
     events = evRecs.map(r => ({
       id:        r.id,
@@ -827,7 +833,7 @@ function renderTravel() {
   const grid = document.getElementById('travel-grid');
   grid.innerHTML = '';
 
-  const visiblePeople = filterPerson === 'all' ? PEOPLE : PEOPLE.filter(p => p.key === filterPerson);
+  const visiblePeople = PEOPLE.filter(p => !p.isClient && (filterPerson === 'all' || p.key === filterPerson));
   const cols = visiblePeople.length === 1 ? 1 : 2;
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
@@ -961,8 +967,8 @@ async function addResource() {
 }
 
 // ─── CALENDAR ────────────────────────────────────────────────────────────────
-const PERSON_COLORS   = { jon:'#ef4444', fotoulla:'#3b82f6', rob:'#a855f7', jay:'#eab308' };
-const PERSON_INITIALS = { jon:'JP', fotoulla:'FD', rob:'RB', jay:'JK' };
+const PERSON_COLORS   = { jon:'#ef4444', fotoulla:'#3b82f6', rob:'#a855f7', jay:'#eab308', client:'#d97706' };
+const PERSON_INITIALS = { jon:'Jon', fotoulla:'Fotoulla', rob:'Rob', jay:'Jay', client:'Client(s)' };
 
 function renderCalendar() {
   const grid = document.getElementById('cal-grid');
@@ -978,8 +984,8 @@ function renderCalendar() {
     const parts = day.split(' ');
     col.innerHTML = `<div class="cal-day-header"><div class="cal-date">${parts[2]}</div><div class="cal-weekday">${parts[0]} · Jun</div></div>`;
 
-    // Travel cards — respect person filter
-    PEOPLE.forEach(p => {
+    // Travel cards — respect person filter (exclude client)
+    PEOPLE.filter(p => !p.isClient).forEach(p => {
       if (filterPerson !== 'all' && filterPerson !== p.key) return;
       const d = travelData[p.key];
       if (d.arrDay === day) {
