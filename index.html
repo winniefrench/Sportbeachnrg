@@ -403,9 +403,62 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #ccc; }
+  /* LOGIN OVERLAY */
+  #login-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  #login-overlay.hidden { display: none; }
+  .login-box {
+    width: 340px;
+    padding: 40px 36px 36px;
+    border: 1px solid var(--border-faint);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .login-box .login-header { display: flex; flex-direction: column; gap: 4px; }
+  .login-box .login-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .login-box .login-sub { font-size: 12px; color: var(--text-muted); }
+  .login-box input[type="password"] {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: inherit; font-size: 13px; color: var(--text);
+    outline: none; transition: border-color 0.15s;
+    letter-spacing: 0.1em;
+  }
+  .login-box input[type="password"]:focus { border-color: #aaa; }
+  .login-box input[type="password"].error { border-color: #ef4444; }
+  .login-box .login-btn {
+    width: 100%; padding: 9px;
+    background: var(--text); color: #fff;
+    border: none; border-radius: 6px;
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .login-box .login-btn:hover { opacity: 0.85; }
+  .login-error {
+    font-size: 11.5px; color: #ef4444; text-align: center;
+    min-height: 16px;
+  }
 </style>
 </head>
 <body>
+
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="login-title">NRG — Cannes Lions 2026</div>
+      <div class="login-sub">Enter the team password to continue</div>
+    </div>
+    <input type="password" id="login-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">Sign in</button>
+  </div>
+</div>
+
 <div id="loading-bar" style="position:fixed;top:0;left:0;right:0;height:2px;background:#6366f1;opacity:0;transition:opacity 0.3s;z-index:9999;"></div>
 <div id="toast" style="display:none;position:fixed;bottom:20px;right:20px;background:#111;color:#fff;font-size:12px;font-family:inherit;padding:8px 16px;border-radius:6px;z-index:9998;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
 
@@ -1046,8 +1099,35 @@ function escHtml(s) {
   return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+const AUTH_KEY = 'nrg_cannes_auth';
+const AUTH_PW  = 'SB2026NRG';
+
+function doLogin() {
+  const val = document.getElementById('login-input').value;
+  const input = document.getElementById('login-input');
+  const err = document.getElementById('login-error');
+  if (val === AUTH_PW) {
+    localStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('login-overlay').classList.add('hidden');
+    err.textContent = '';
+    input.classList.remove('error');
+    loadAll();
+  } else {
+    input.classList.add('error');
+    err.textContent = 'Incorrect password. Try again.';
+    input.value = '';
+    input.focus();
+  }
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-loadAll();
+if (localStorage.getItem(AUTH_KEY) === '1') {
+  document.getElementById('login-overlay').classList.add('hidden');
+  loadAll();
+} else {
+  document.getElementById('login-input').focus();
+}
 </script>
 </body>
 </html>
