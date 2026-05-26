@@ -734,12 +734,28 @@ setInterval(() => {
 }, 30000);
 
 // ─── EVENTS ──────────────────────────────────────────────────────────────────
+function parseTime(t) {
+  if (!t) return 9999;
+  const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!m) return 9999;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+  if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+  return h * 60 + min;
+}
+
 function renderEvents() {
   const tbody = document.getElementById('events-tbody');
   tbody.innerHTML = '';
   let vis=0, reg=0, must=0, open=0;
 
-  events.forEach(ev => {
+  const sortedEvents = [...events].sort((a, b) => {
+    const dayA = DAYS.indexOf(a.day), dayB = DAYS.indexOf(b.day);
+    if (dayA !== dayB) return dayA - dayB;
+    return parseTime(a.time) - parseTime(b.time);
+  });
+
+  sortedEvents.forEach(ev => {
     const show = matchesFilter(ev);
     if (show) { vis++; if(ev.status==='Registered')reg++; if(ev.priority==='Must Attend')must++; if(ev.status==='Registration Open')open++; }
 
