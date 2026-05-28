@@ -179,6 +179,10 @@
   .s-waitlist   .pill-icon { background: #fb923c; color: #fff; }
   .s-no-reg     { background: #f7fee7; color: #3f6212; }
   .s-no-reg     .pill-icon { background: #bef264; color: #3f6212; }
+  .s-pending    { background: #fefce8; color: #a16207; }
+  .s-pending    .pill-icon { background: #fde047; color: #a16207; }
+  .s-restricted { background: #fdf2f8; color: #9d174d; }
+  .s-restricted .pill-icon { background: #f9a8d4; color: #9d174d; }
 
   /* ATTENDEE CIRCLES */
   .attendee-tags { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; }
@@ -338,12 +342,15 @@
     padding: 1px 5px; opacity: 0; transition: all 0.15s; line-height: 1.4;
   }
   .resource-del:hover { color: #cc3333; border-color: #cc3333; }
-  .resource-card {
+  .resource-card-wrap {
     background: var(--bg-subtle); border: 1px solid var(--border-faint); border-radius: 5px;
-    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
-    text-decoration: none; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
   }
-  .resource-card:hover { border-color: var(--border); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .resource-card-wrap:hover { border-color: var(--border); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .resource-card {
+    padding: 10px 14px 6px; display: flex; align-items: center; gap: 10px;
+    text-decoration: none; background: transparent; border: none; border-radius: 0;
+  }
   .resource-icon {
     width: 28px; height: 28px; background: #fff;
     border: none; border-radius: 4px;
@@ -351,6 +358,10 @@
   }
   .resource-card h4 { font-size: 12px; font-weight: 500; color: var(--text); }
   .resource-card p { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .resource-att-row {
+    display: flex; gap: 3px; padding: 0 10px 8px; flex-wrap: wrap;
+    border-top: 1px solid var(--border-faint); margin: 0 10px; padding-top: 6px;
+  }
 
   /* ── CALENDAR ──────────────────────────────────────────────── */
   .cal-grid {
@@ -396,8 +407,45 @@
     font-size: 9px; font-weight: 700; color: #9ca3af;
     text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;
   }
-  .cal-travel-person { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
+  .cal-travel-person { font-size: 12.5px; font-weight: 500; margin-bottom: 2px; }
   .cal-travel-detail { font-size: 10px; color: var(--text-muted); }
+
+  /* ── EVENT EDIT MODAL ─────────────────────────────────────── */
+  #event-modal-backdrop {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.3); backdrop-filter: blur(2px);
+  }
+  #event-modal-backdrop.open { display: flex; align-items: center; justify-content: center; }
+  #event-modal {
+    background: #fff; border-radius: 10px; width: 480px; max-width: 95vw;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18); padding: 24px 28px 20px;
+    position: relative; display: flex; flex-direction: column; gap: 14px;
+  }
+  .em-close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; font-size: 18px; color: var(--text-muted);
+    cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 4px;
+  }
+  .em-close:hover { background: var(--bg-subtle); color: var(--text); }
+  .em-title { font-size: 15px; font-weight: 600; color: var(--text); padding-right: 24px; }
+  .em-row { display: flex; gap: 10px; }
+  .em-field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .em-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .em-input {
+    font-family: inherit; font-size: 12.5px; color: var(--text);
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: 5px; padding: 6px 9px; outline: none; transition: border-color 0.15s;
+  }
+  .em-input:focus { border-color: #888; background: #fff; }
+  .em-select { appearance: none; cursor: pointer; }
+  .em-att-row { display: flex; gap: 4px; flex-wrap: wrap; padding-top: 2px; }
+  .em-footer { display: flex; justify-content: flex-end; padding-top: 4px; border-top: 1px solid var(--border-faint); }
+  .em-save-btn {
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    background: #111; color: #fff; border: none; border-radius: 5px;
+    padding: 7px 20px; cursor: pointer; transition: background 0.15s;
+  }
+  .em-save-btn:hover { background: #333; }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -460,6 +508,61 @@
 </div>
 
 <div id="loading-bar" style="position:fixed;top:0;left:0;right:0;height:2px;background:#6366f1;opacity:0;transition:opacity 0.3s;z-index:9999;"></div>
+
+<!-- EVENT EDIT MODAL -->
+<div id="event-modal-backdrop" onclick="closeEventModal(event)">
+  <div id="event-modal">
+    <button class="em-close" onclick="closeEventModal()">×</button>
+    <div class="em-title" id="em-name-display"></div>
+    <div class="em-row">
+      <div class="em-field">
+        <div class="em-label">Event Name</div>
+        <input class="em-input" id="em-name" type="text" oninput="emFieldChange('name',this.value)">
+      </div>
+    </div>
+    <div class="em-row">
+      <div class="em-field">
+        <div class="em-label">Day</div>
+        <select class="em-input em-select" id="em-day" onchange="emFieldChange('day',this.value)"></select>
+      </div>
+      <div class="em-field">
+        <div class="em-label">Time</div>
+        <input class="em-input" id="em-time" type="text" placeholder="10:00 AM" oninput="emFieldChange('time',this.value)">
+      </div>
+    </div>
+    <div class="em-row">
+      <div class="em-field">
+        <div class="em-label">Type</div>
+        <select class="em-input em-select" id="em-type" onchange="emFieldChange('type',this.value)"></select>
+      </div>
+      <div class="em-field">
+        <div class="em-label">Priority</div>
+        <select class="em-input em-select" id="em-priority" onchange="emFieldChange('priority',this.value)"></select>
+      </div>
+    </div>
+    <div class="em-row">
+      <div class="em-field">
+        <div class="em-label">Status</div>
+        <select class="em-input em-select" id="em-status" onchange="emFieldChange('status',this.value)"></select>
+      </div>
+      <div class="em-field">
+        <div class="em-label">Location</div>
+        <input class="em-input" id="em-location" type="text" placeholder="Location..." oninput="emFieldChange('location',this.value)">
+      </div>
+    </div>
+    <div class="em-field">
+      <div class="em-label">Notes</div>
+      <input class="em-input" id="em-notes" type="text" placeholder="Notes..." oninput="emFieldChange('notes',this.value)">
+    </div>
+    <div class="em-field">
+      <div class="em-label">Attendees</div>
+      <div class="em-att-row" id="em-att-row"></div>
+    </div>
+    <div class="em-footer">
+      <button class="em-save-btn" onclick="closeEventModal()">Done</button>
+    </div>
+  </div>
+</div>
 <div id="toast" style="display:none;position:fixed;bottom:20px;right:20px;background:#111;color:#fff;font-size:12px;font-family:inherit;padding:8px 16px;border-radius:6px;z-index:9998;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
 
 <div class="header">
@@ -493,14 +596,12 @@
     </select>
     <select class="filter-select" id="filter-type" onchange="setFilter('type', this.value, this)">
       <option value="all">All Types</option>
-      <option value="Panel/Session">Panel / Session</option>
-      <option value="Dinner">Dinner</option>
-      <option value="Networking">Networking</option>
-      <option value="Party/Social">Party / Social</option>
-      <option value="Brand Activation">Brand Activation</option>
-      <option value="Sport Beach">Sport Beach</option>
+      <option value="Workouts/Open Play">Workouts / Open Play</option>
+      <option value="Roundtable">Roundtable</option>
       <option value="Content Studio">Content Studio</option>
-      <option value="Other">Other</option>
+      <option value="Dinner/Networking">Dinner / Networking</option>
+      <option value="Panel">Panel</option>
+      <option value="Outside Event">Outside Event</option>
     </select>
   </div>
 </div>
@@ -574,21 +675,21 @@ const AT_URL   = `https://api.airtable.com/v0/${AT_BASE}`;
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const PEOPLE = [
   { key: 'jon',      label: 'Jon Penn',    initials: 'Jon',       role: 'CEO', dot: '#fca5a5', dotSolid: '#ef4444', cls: 'att-jon' },
-  { key: 'fotoulla', label: 'Fotoulla D.', initials: 'Fotoulla',  role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
+  { key: 'fotoulla', label: 'Fotoulla Damaskos', initials: 'Fotoulla',  role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
   { key: 'rob',      label: 'Rob Barrish', initials: 'Rob',       role: '',    dot: '#c084fc', dotSolid: '#a855f7', cls: 'att-rob' },
   { key: 'jay',      label: 'Jay Kaufman', initials: 'Jay',       role: '',    dot: '#fde047', dotSolid: '#eab308', cls: 'att-jay' },
   { key: 'client',   label: 'Client',      initials: 'Client(s)', role: '',    dot: '#fcd34d', dotSolid: '#d97706', cls: 'att-client', isClient: true },
 ];
 
 const DAYS       = ['Sun Jun 21','Mon Jun 22','Tue Jun 23','Wed Jun 24','Thu Jun 25'];
-const TYPES      = ['Panel/Session','Dinner','Networking','Party/Social','Brand Activation','Sport Beach','Content Studio','Other'];
+const TYPES      = ['Workouts/Open Play','Roundtable','Content Studio','Dinner/Networking','Panel','Outside Event'];
 const PRIORITIES = ['Must Attend','High Priority','Optional','On the Radar'];
-const STATUSES   = ['Registered','Registration Open','Not Yet Open','Waitlisted','No Registration Required'];
+const STATUSES   = ['Registered','No Registration Required','Not Open','Pending','Restricted for NRG'];
 
 const PRIORITY_CLASS = { 'Must Attend':'p-must', 'High Priority':'p-high', 'Optional':'p-optional', 'On the Radar':'p-radar' };
-const STATUS_CLASS   = { 'Registered':'s-registered', 'Registration Open':'s-open', 'Not Yet Open':'s-not-open', 'Waitlisted':'s-waitlist', 'No Registration Required':'s-no-reg' };
+const STATUS_CLASS   = { 'Registered':'s-registered', 'No Registration Required':'s-no-reg', 'Not Open':'s-not-open', 'Pending':'s-pending', 'Restricted for NRG':'s-restricted' };
 const PRIORITY_ICON  = { 'Must Attend':'!', 'High Priority':'↑', 'Optional':'○', 'On the Radar':'·' };
-const STATUS_ICON    = { 'Registered':'✓', 'Registration Open':'→', 'Not Yet Open':'–', 'Waitlisted':'…', 'No Registration Required':'✦' };
+const STATUS_ICON    = { 'Registered':'✓', 'No Registration Required':'✦', 'Not Open':'–', 'Pending':'…', 'Restricted for NRG':'⊘' };
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let events = [];
@@ -695,7 +796,7 @@ async function loadAll(silent) {
 
     if (rsRecs.length === 0) {
       // Show defaults immediately
-      resources = DEFAULT_RESOURCES.map((r,i) => ({ id:'default-'+i, ...r }));
+      resources = DEFAULT_RESOURCES.map((r,i) => ({ id:'default-'+i, ...r, attendees:[] }));
       // Try to seed to Airtable in background (non-blocking)
       if (!silent) {
         (async () => {
@@ -712,7 +813,7 @@ async function loadAll(silent) {
         })();
       }
     } else {
-      resources = rsRecs.map(r => ({ id:r.id, icon:r.fields.Icon||'🔗', name:r.fields.Name||'', desc:r.fields.Desc||'', url:r.fields.URL||'' }));
+      resources = rsRecs.map(r => ({ id:r.id, icon:r.fields.Icon||'🔗', name:r.fields.Name||'', desc:r.fields.Desc||'', url:r.fields.URL||'', attendees: r.fields.Attendees ? r.fields.Attendees.split(',').map(s=>s.trim()).filter(Boolean) : [] }));
     }
 
     renderAll();
@@ -990,6 +1091,10 @@ function renderResources() {
   const grid = document.getElementById('resources-grid');
   grid.innerHTML = '';
   resources.forEach(r => {
+    const attHtml = PEOPLE.filter(p => !p.isClient).map(p => {
+      const on = r.attendees.includes(p.key);
+      return `<span class="att-circle att-${p.key}${on?'':' off'}" title="${p.label}" onclick="toggleResourceAtt('${r.id}','${p.key}')">${p.initials}</span>`;
+    }).join('');
     const wrap = document.createElement('div');
     wrap.className = 'resource-card-wrap';
     wrap.innerHTML = `
@@ -997,10 +1102,26 @@ function renderResources() {
         <div class="resource-icon">${r.icon}</div>
         <div><h4>${escHtml(r.name)}</h4><p>${escHtml(r.desc)}</p></div>
       </a>
+      <div class="resource-att-row">${attHtml}</div>
       <button class="resource-del" onclick="deleteResource('${r.id}')" title="Remove">×</button>
     `;
     grid.appendChild(wrap);
   });
+}
+
+async function toggleResourceAtt(id, personKey) {
+  const r = resources.find(r=>r.id===id);
+  if (!r) return;
+  if (r.attendees.includes(personKey)) {
+    r.attendees = r.attendees.filter(k=>k!==personKey);
+  } else {
+    r.attendees.push(personKey);
+  }
+  renderResources();
+  if (id && !String(id).startsWith('default-')) {
+    try { await atReq('Resources','PATCH',{fields:{Attendees:r.attendees.join(',')}},id); }
+    catch(e) { showToast('Save failed',true); }
+  }
 }
 
 async function deleteResource(id) {
@@ -1033,6 +1154,66 @@ async function addResource() {
     toggleAddResource();
   } catch(e) { showToast('Could not add resource: '+e.message,true); }
   finally { showLoading(false); }
+}
+
+// ─── EVENT EDIT MODAL ────────────────────────────────────────────────────────
+let _modalEventId = null;
+
+function openEventModal(id) {
+  const ev = events.find(e=>e.id===id);
+  if (!ev) return;
+  _modalEventId = id;
+
+  document.getElementById('em-name-display').textContent = ev.name || 'Untitled Event';
+  document.getElementById('em-name').value     = ev.name;
+  document.getElementById('em-time').value     = ev.time;
+  document.getElementById('em-location').value = ev.location;
+  document.getElementById('em-notes').value    = ev.notes;
+
+  const daySel = document.getElementById('em-day');
+  daySel.innerHTML = DAYS.map(d=>`<option${ev.day===d?' selected':''}>${d}</option>`).join('');
+
+  const typeSel = document.getElementById('em-type');
+  typeSel.innerHTML = TYPES.map(t=>`<option${ev.type===t?' selected':''}>${t}</option>`).join('');
+
+  const priSel = document.getElementById('em-priority');
+  priSel.innerHTML = PRIORITIES.map(p=>`<option${ev.priority===p?' selected':''}>${p}</option>`).join('');
+
+  const staSel = document.getElementById('em-status');
+  staSel.innerHTML = STATUSES.map(s=>`<option${ev.status===s?' selected':''}>${s}</option>`).join('');
+
+  const attRow = document.getElementById('em-att-row');
+  attRow.innerHTML = PEOPLE.map(p => {
+    const on = ev.attendees.includes(p.key);
+    return `<span class="att-circle att-${p.key}${on?'':' off'}" title="${p.label}" onclick="emToggleAtt('${p.key}',this)">${p.initials}</span>`;
+  }).join('');
+
+  document.getElementById('event-modal-backdrop').classList.add('open');
+  setTimeout(()=>document.getElementById('em-name').focus(), 50);
+}
+
+function closeEventModal(e) {
+  if (e && e.target !== document.getElementById('event-modal-backdrop')) return;
+  document.getElementById('event-modal-backdrop').classList.remove('open');
+  _modalEventId = null;
+}
+
+function emFieldChange(field, val) {
+  if (!_modalEventId) return;
+  if (field === 'name') document.getElementById('em-name-display').textContent = val || 'Untitled Event';
+  updateField(_modalEventId, field, val);
+}
+
+async function emToggleAtt(key, el) {
+  if (!_modalEventId) return;
+  const ev = events.find(e=>e.id===_modalEventId);
+  if (!ev) return;
+  const i = ev.attendees.indexOf(key);
+  if (i===-1) ev.attendees.push(key); else ev.attendees.splice(i,1);
+  el.classList.toggle('off');
+  try { await atReq('Events','PATCH',{fields:{Attendees:ev.attendees.join(',')}},_modalEventId); }
+  catch(e) { showToast('Save failed',true); }
+  renderEvents();
 }
 
 // ─── CALENDAR ────────────────────────────────────────────────────────────────
@@ -1098,10 +1279,12 @@ function renderCalendar() {
         const dots = ev.attendees.map(k=>`<span class="cal-att-dot" style="background:${PERSON_COLORS[k]||'#ccc'}" title="${PEOPLE.find(p=>p.key===k)?.label||k}">${PERSON_INITIALS[k]||'?'}</span>`).join('');
         const c = document.createElement('div');
         c.className = `cal-event-card ${PRIORITY_CLASS[ev.priority]||'p-radar'}`;
+        c.style.cursor = 'pointer';
         c.innerHTML = `<div class="cal-event-name">${escHtml(ev.name)||'<em style="color:#ccc">Untitled</em>'}</div>
           ${ev.time?`<div class="cal-event-time">${escHtml(ev.time)}</div>`:''}
           <div class="cal-event-type">${escHtml(ev.type)}</div>
           <div class="cal-att-dots">${dots}</div>`;
+        c.addEventListener('click', () => openEventModal(ev.id));
         col.appendChild(c);
       });
     }
