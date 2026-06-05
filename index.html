@@ -179,10 +179,22 @@
   .s-waitlist   .pill-icon { background: #fb923c; color: #fff; }
   .s-no-reg     { background: #f7fee7; color: #3f6212; }
   .s-no-reg     .pill-icon { background: #bef264; color: #3f6212; }
-  .s-pending    { background: #fefce8; color: #a16207; }
-  .s-pending    .pill-icon { background: #fde047; color: #a16207; }
-  .s-restricted { background: #fdf2f8; color: #9d174d; }
-  .s-restricted .pill-icon { background: #f9a8d4; color: #9d174d; }
+  .s-closed     { background: #fef2f2; color: #b91c1c; }
+  .s-closed     .pill-icon { background: #ef4444; color: #fff; }
+
+  /* APPROVAL TAG */
+  .approval-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1px;
+    padding: 2px 8px; border-radius: 20px; white-space: nowrap;
+    cursor: pointer; user-select: none; transition: opacity 0.15s;
+    background: #fef2f2; color: #b91c1c;
+  }
+  .approval-tag:hover { opacity: 0.75; }
+  .approval-tag.open {
+    background: #f9fafb; color: #6b7280;
+  }
+  .approval-tag.open:hover { background: #f3f4f6; color: var(--text); }
 
   /* ATTENDEE CIRCLES */
   .attendee-tags { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; }
@@ -342,15 +354,12 @@
     padding: 1px 5px; opacity: 0; transition: all 0.15s; line-height: 1.4;
   }
   .resource-del:hover { color: #cc3333; border-color: #cc3333; }
-  .resource-card-wrap {
-    background: var(--bg-subtle); border: 1px solid var(--border-faint); border-radius: 5px;
-    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
-  }
-  .resource-card-wrap:hover { border-color: var(--border); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
   .resource-card {
-    padding: 10px 14px 6px; display: flex; align-items: center; gap: 10px;
-    text-decoration: none; background: transparent; border: none; border-radius: 0;
+    background: var(--bg-subtle); border: 1px solid var(--border-faint); border-radius: 5px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+    text-decoration: none; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
   }
+  .resource-card:hover { border-color: var(--border); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
   .resource-icon {
     width: 28px; height: 28px; background: #fff;
     border: none; border-radius: 4px;
@@ -358,10 +367,6 @@
   }
   .resource-card h4 { font-size: 12px; font-weight: 500; color: var(--text); }
   .resource-card p { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-  .resource-att-row {
-    display: flex; gap: 3px; padding: 0 10px 8px; flex-wrap: wrap;
-    border-top: 1px solid var(--border-faint); margin: 0 10px; padding-top: 6px;
-  }
 
   /* ── CALENDAR ──────────────────────────────────────────────── */
   .cal-grid {
@@ -407,45 +412,8 @@
     font-size: 9px; font-weight: 700; color: #9ca3af;
     text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;
   }
-  .cal-travel-person { font-size: 12.5px; font-weight: 500; margin-bottom: 2px; }
+  .cal-travel-person { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
   .cal-travel-detail { font-size: 10px; color: var(--text-muted); }
-
-  /* ── EVENT EDIT MODAL ─────────────────────────────────────── */
-  #event-modal-backdrop {
-    display: none; position: fixed; inset: 0; z-index: 1000;
-    background: rgba(0,0,0,0.3); backdrop-filter: blur(2px);
-  }
-  #event-modal-backdrop.open { display: flex; align-items: center; justify-content: center; }
-  #event-modal {
-    background: #fff; border-radius: 10px; width: 480px; max-width: 95vw;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.18); padding: 24px 28px 20px;
-    position: relative; display: flex; flex-direction: column; gap: 14px;
-  }
-  .em-close {
-    position: absolute; top: 14px; right: 16px;
-    background: none; border: none; font-size: 18px; color: var(--text-muted);
-    cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 4px;
-  }
-  .em-close:hover { background: var(--bg-subtle); color: var(--text); }
-  .em-title { font-size: 15px; font-weight: 600; color: var(--text); padding-right: 24px; }
-  .em-row { display: flex; gap: 10px; }
-  .em-field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-  .em-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .em-input {
-    font-family: inherit; font-size: 12.5px; color: var(--text);
-    background: var(--bg-subtle); border: 1px solid var(--border);
-    border-radius: 5px; padding: 6px 9px; outline: none; transition: border-color 0.15s;
-  }
-  .em-input:focus { border-color: #888; background: #fff; }
-  .em-select { appearance: none; cursor: pointer; }
-  .em-att-row { display: flex; gap: 4px; flex-wrap: wrap; padding-top: 2px; }
-  .em-footer { display: flex; justify-content: flex-end; padding-top: 4px; border-top: 1px solid var(--border-faint); }
-  .em-save-btn {
-    font-family: inherit; font-size: 12px; font-weight: 500;
-    background: #111; color: #fff; border: none; border-radius: 5px;
-    padding: 7px 20px; cursor: pointer; transition: background 0.15s;
-  }
-  .em-save-btn:hover { background: #333; }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -508,61 +476,6 @@
 </div>
 
 <div id="loading-bar" style="position:fixed;top:0;left:0;right:0;height:2px;background:#6366f1;opacity:0;transition:opacity 0.3s;z-index:9999;"></div>
-
-<!-- EVENT EDIT MODAL -->
-<div id="event-modal-backdrop" onclick="closeEventModal(event)">
-  <div id="event-modal">
-    <button class="em-close" onclick="closeEventModal()">×</button>
-    <div class="em-title" id="em-name-display"></div>
-    <div class="em-row">
-      <div class="em-field">
-        <div class="em-label">Event Name</div>
-        <input class="em-input" id="em-name" type="text" oninput="emFieldChange('name',this.value)">
-      </div>
-    </div>
-    <div class="em-row">
-      <div class="em-field">
-        <div class="em-label">Day</div>
-        <select class="em-input em-select" id="em-day" onchange="emFieldChange('day',this.value)"></select>
-      </div>
-      <div class="em-field">
-        <div class="em-label">Time</div>
-        <input class="em-input" id="em-time" type="text" placeholder="10:00 AM" oninput="emFieldChange('time',this.value)">
-      </div>
-    </div>
-    <div class="em-row">
-      <div class="em-field">
-        <div class="em-label">Type</div>
-        <select class="em-input em-select" id="em-type" onchange="emFieldChange('type',this.value)"></select>
-      </div>
-      <div class="em-field">
-        <div class="em-label">Priority</div>
-        <select class="em-input em-select" id="em-priority" onchange="emFieldChange('priority',this.value)"></select>
-      </div>
-    </div>
-    <div class="em-row">
-      <div class="em-field">
-        <div class="em-label">Status</div>
-        <select class="em-input em-select" id="em-status" onchange="emFieldChange('status',this.value)"></select>
-      </div>
-      <div class="em-field">
-        <div class="em-label">Location</div>
-        <input class="em-input" id="em-location" type="text" placeholder="Location..." oninput="emFieldChange('location',this.value)">
-      </div>
-    </div>
-    <div class="em-field">
-      <div class="em-label">Notes</div>
-      <input class="em-input" id="em-notes" type="text" placeholder="Notes..." oninput="emFieldChange('notes',this.value)">
-    </div>
-    <div class="em-field">
-      <div class="em-label">Attendees</div>
-      <div class="em-att-row" id="em-att-row"></div>
-    </div>
-    <div class="em-footer">
-      <button class="em-save-btn" onclick="closeEventModal()">Done</button>
-    </div>
-  </div>
-</div>
 <div id="toast" style="display:none;position:fixed;bottom:20px;right:20px;background:#111;color:#fff;font-size:12px;font-family:inherit;padding:8px 16px;border-radius:6px;z-index:9998;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
 
 <div class="header">
@@ -596,12 +509,19 @@
     </select>
     <select class="filter-select" id="filter-type" onchange="setFilter('type', this.value, this)">
       <option value="all">All Types</option>
-      <option value="Workouts/Open Play">Workouts / Open Play</option>
-      <option value="Roundtable">Roundtable</option>
+      <option value="Panel/Session">Panel / Session</option>
+      <option value="Dinner">Dinner</option>
+      <option value="Networking">Networking</option>
+      <option value="Party/Social">Party / Social</option>
+      <option value="Brand Activation">Brand Activation</option>
+      <option value="Sport Beach">Sport Beach</option>
       <option value="Content Studio">Content Studio</option>
-      <option value="Dinner/Networking">Dinner / Networking</option>
-      <option value="Panel">Panel</option>
-      <option value="Outside Event">Outside Event</option>
+      <option value="Other">Other</option>
+    </select>
+    <select class="filter-select" id="filter-approval" onchange="setFilter('approval', this.value, this)">
+      <option value="all">All Access</option>
+      <option value="open">Open to Everyone</option>
+      <option value="approval">Requires Approval</option>
     </select>
   </div>
 </div>
@@ -621,6 +541,7 @@
             <th>Attendees</th>
             <th>Priority</th>
             <th>Status</th>
+            <th style="min-width:120px">Access</th>
             <th>Location</th>
             <th>Notes</th>
             <th style="width:28px"></th>
@@ -675,25 +596,25 @@ const AT_URL   = `https://api.airtable.com/v0/${AT_BASE}`;
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const PEOPLE = [
   { key: 'jon',      label: 'Jon Penn',    initials: 'Jon',       role: 'CEO', dot: '#fca5a5', dotSolid: '#ef4444', cls: 'att-jon' },
-  { key: 'fotoulla', label: 'Fotoulla Damaskos', initials: 'Fotoulla',  role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
+  { key: 'fotoulla', label: 'Fotoulla D.', initials: 'Fotoulla',  role: 'SME', dot: '#93c5fd', dotSolid: '#3b82f6', cls: 'att-fotoulla' },
   { key: 'rob',      label: 'Rob Barrish', initials: 'Rob',       role: '',    dot: '#c084fc', dotSolid: '#a855f7', cls: 'att-rob' },
   { key: 'jay',      label: 'Jay Kaufman', initials: 'Jay',       role: '',    dot: '#fde047', dotSolid: '#eab308', cls: 'att-jay' },
   { key: 'client',   label: 'Client',      initials: 'Client(s)', role: '',    dot: '#fcd34d', dotSolid: '#d97706', cls: 'att-client', isClient: true },
 ];
 
 const DAYS       = ['Sun Jun 21','Mon Jun 22','Tue Jun 23','Wed Jun 24','Thu Jun 25'];
-const TYPES      = ['Workouts/Open Play','Roundtable','Content Studio','Dinner/Networking','Panel','Outside Event'];
+const TYPES      = ['Panel/Session','Dinner','Networking','Party/Social','Brand Activation','Sport Beach','Content Studio','Other'];
 const PRIORITIES = ['Must Attend','High Priority','Optional','On the Radar'];
-const STATUSES   = ['Registered','No Registration Required','Not Open','Pending','Restricted for NRG'];
+const STATUSES   = ['Registered','Registration Open','Not Yet Open','Waitlisted','No Registration Required','Closed / Full'];
 
 const PRIORITY_CLASS = { 'Must Attend':'p-must', 'High Priority':'p-high', 'Optional':'p-optional', 'On the Radar':'p-radar' };
-const STATUS_CLASS   = { 'Registered':'s-registered', 'No Registration Required':'s-no-reg', 'Not Open':'s-not-open', 'Pending':'s-pending', 'Restricted for NRG':'s-restricted' };
+const STATUS_CLASS   = { 'Registered':'s-registered', 'Registration Open':'s-open', 'Not Yet Open':'s-not-open', 'Waitlisted':'s-waitlist', 'No Registration Required':'s-no-reg', 'Closed / Full':'s-closed' };
 const PRIORITY_ICON  = { 'Must Attend':'!', 'High Priority':'↑', 'Optional':'○', 'On the Radar':'·' };
-const STATUS_ICON    = { 'Registered':'✓', 'No Registration Required':'✦', 'Not Open':'–', 'Pending':'…', 'Restricted for NRG':'⊘' };
+const STATUS_ICON    = { 'Registered':'✓', 'Registration Open':'→', 'Not Yet Open':'–', 'Waitlisted':'…', 'No Registration Required':'✦', 'Closed / Full':'✕' };
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let events = [];
-let filterDay = 'all', filterPerson = 'all', filterType = 'all';
+let filterDay = 'all', filterPerson = 'all', filterType = 'all', filterApproval = 'all';
 
 let travelData = {};
 PEOPLE.forEach(p => { travelData[p.key] = { recordId:null, arrDay:'', arrTime:'', arrFlight:'', depDay:'', depTime:'', depFlight:'', transfer:'', notes:'' }; });
@@ -724,7 +645,7 @@ const DEFAULT_RESOURCES = [
   { icon:'🎵', name:'TikTok at Cannes',         desc:'TikTok activation 2026',         url:'https://www.tiktokatcannes.com/' },
 ];
 
-const EV_FIELD_MAP = { name:'Name', day:'Day', time:'Time', type:'Type', location:'Location', notes:'Notes', priority:'Priority', status:'Status' };
+const EV_FIELD_MAP = { name:'Name', day:'Day', time:'Time', type:'Type', location:'Location', notes:'Notes', priority:'Priority', status:'Status', approval:'Approval' };
 const TR_FIELD_MAP = { arrDay:'ArrDay', arrTime:'ArrTime', arrFlight:'ArrFlight', depDay:'DepDay', depTime:'DepTime', depFlight:'DepFlight', transfer:'Transfer', notes:'Notes' };
 
 // ─── AIRTABLE UTILS ──────────────────────────────────────────────────────────
@@ -786,6 +707,7 @@ async function loadAll(silent) {
       status:    r.fields.Status    || 'Not Yet Open',
       location:  r.fields.Location  || '',
       notes:     r.fields.Notes     || '',
+      approval:  r.fields.Approval  || false,
     }));
 
     PEOPLE.forEach(p => { travelData[p.key] = { recordId:null, arrDay:'', arrTime:'', arrFlight:'', depDay:'', depTime:'', depFlight:'', transfer:'', notes:'' }; });
@@ -796,7 +718,7 @@ async function loadAll(silent) {
 
     if (rsRecs.length === 0) {
       // Show defaults immediately
-      resources = DEFAULT_RESOURCES.map((r,i) => ({ id:'default-'+i, ...r, attendees:[] }));
+      resources = DEFAULT_RESOURCES.map((r,i) => ({ id:'default-'+i, ...r }));
       // Try to seed to Airtable in background (non-blocking)
       if (!silent) {
         (async () => {
@@ -813,7 +735,7 @@ async function loadAll(silent) {
         })();
       }
     } else {
-      resources = rsRecs.map(r => ({ id:r.id, icon:r.fields.Icon||'🔗', name:r.fields.Name||'', desc:r.fields.Desc||'', url:r.fields.URL||'', attendees: r.fields.Attendees ? r.fields.Attendees.split(',').map(s=>s.trim()).filter(Boolean) : [] }));
+      resources = rsRecs.map(r => ({ id:r.id, icon:r.fields.Icon||'🔗', name:r.fields.Name||'', desc:r.fields.Desc||'', url:r.fields.URL||'' }));
     }
 
     renderAll();
@@ -835,14 +757,14 @@ setInterval(() => {
 }, 30000);
 
 // ─── EVENTS ──────────────────────────────────────────────────────────────────
-function parseTime(t) {
-  if (!t) return 9999;
-  const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+function parseTime(s) {
+  if (!s) return 9999;
+  const m = s.match(/(\d+):(\d+)\s*(AM|PM)/i);
   if (!m) return 9999;
-  let h = parseInt(m[1]), min = parseInt(m[2]);
+  let h = parseInt(m[1]), mn = parseInt(m[2]);
   if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
   if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
-  return h * 60 + min;
+  return h * 60 + mn;
 }
 
 function renderEvents() {
@@ -850,13 +772,13 @@ function renderEvents() {
   tbody.innerHTML = '';
   let vis=0, reg=0, must=0, open=0;
 
-  const sortedEvents = [...events].sort((a, b) => {
-    const dayA = DAYS.indexOf(a.day), dayB = DAYS.indexOf(b.day);
-    if (dayA !== dayB) return dayA - dayB;
+  const sorted = [...events].sort((a, b) => {
+    const di = DAYS.indexOf(a.day) - DAYS.indexOf(b.day);
+    if (di !== 0) return di;
     return parseTime(a.time) - parseTime(b.time);
   });
 
-  sortedEvents.forEach(ev => {
+  sorted.forEach(ev => {
     const show = matchesFilter(ev);
     if (show) { vis++; if(ev.status==='Registered')reg++; if(ev.priority==='Must Attend')must++; if(ev.status==='Registration Open')open++; }
 
@@ -882,6 +804,7 @@ function renderEvents() {
       <td><div class="attendee-tags">${attHtml}</div></td>
       <td><span class="priority-pill ${PRIORITY_CLASS[ev.priority]||'p-radar'}"><span class="pill-icon">${PRIORITY_ICON[ev.priority]||'·'}</span><select class="cell-select" style="color:inherit;font-size:11.5px;font-weight:500;background:transparent" onchange="updatePriority('${id}',this.value,this)">${priorityOpts}</select></span></td>
       <td><span class="status-pill ${STATUS_CLASS[ev.status]||'s-not-open'}"><span class="pill-icon">${STATUS_ICON[ev.status]||'·'}</span><select class="cell-select" style="color:inherit;font-size:11.5px;font-weight:500;background:transparent" onchange="updateStatus('${id}',this.value,this)">${statusOpts}</select></span></td>
+      <td><span class="approval-tag ${ev.approval ? '' : 'open'}" onclick="toggleApproval('${id}',this)" title="${ev.approval ? 'Click to mark as unrestricted' : 'Click to mark as approval needed'}">${ev.approval ? 'Approval Needed' : 'Unrestricted'}</span></td>
       <td><span contenteditable="true" data-placeholder="Location..." onblur="updateField('${id}','location',this.textContent.trim())">${escHtml(ev.location||'')}</span></td>
       <td class="notes-cell"><span contenteditable="true" data-placeholder="Notes..." onblur="updateField('${id}','notes',this.textContent.trim())">${escHtml(ev.notes)}</span></td>
       <td class="del-col"><button class="del-btn" onclick="deleteRow('${id}')">×</button></td>
@@ -896,6 +819,8 @@ function matchesFilter(ev) {
   if (filterDay !== 'all' && ev.day !== filterDay) return false;
   if (filterPerson !== 'all' && !ev.attendees.includes(filterPerson)) return false;
   if (filterType !== 'all' && ev.type !== filterType) return false;
+  if (filterApproval === 'open' && ev.approval) return false;
+  if (filterApproval === 'approval' && !ev.approval) return false;
   return true;
 }
 
@@ -937,12 +862,24 @@ async function toggleAtt(id, key, el) {
   el.classList.toggle('off');
   try { await atReq('Events','PATCH',{fields:{Attendees:ev.attendees.join(',')}},id); } catch(e) { showToast('Save failed',true); }
 }
+async function toggleApproval(id, el) {
+  const ev = events.find(e => e.id === id);
+  if (!ev) return;
+  ev.approval = !ev.approval;
+  el.className = `approval-tag ${ev.approval ? '' : 'open'}`;
+  el.title = ev.approval ? 'Click to mark as unrestricted' : 'Click to mark as approval needed';
+  el.textContent = ev.approval ? 'Approval Needed' : 'Unrestricted';
+  try { await atReq('Events', 'PATCH', { fields: { Approval: ev.approval } }, id); }
+  catch(e) { showToast('Save failed', true); }
+  renderEvents();
+}
+
 async function addRow() {
   showLoading(true);
   try {
-    const res = await atReq('Events','POST',{fields:{Name:'',Day:'Mon Jun 22',Time:'',Type:'Panel/Session',Attendees:'',Priority:'On the Radar',Status:'Not Yet Open',Location:'',Notes:''}});
-    events.push({id:res.id,name:'',day:'Mon Jun 22',time:'',type:'Panel/Session',attendees:[],priority:'On the Radar',status:'Not Yet Open',location:'',notes:''});
-    filterDay='all'; filterPerson='all'; filterType='all';
+    const res = await atReq('Events','POST',{fields:{Name:'',Day:'Mon Jun 22',Time:'',Type:'Panel/Session',Attendees:'',Priority:'On the Radar',Status:'Not Yet Open',Location:'',Notes:'',Approval:false}});
+    events.push({id:res.id,name:'',day:'Mon Jun 22',time:'',type:'Panel/Session',attendees:[],priority:'On the Radar',status:'Not Yet Open',location:'',notes:'',approval:false});
+    filterDay='all'; filterPerson='all'; filterType='all'; filterApproval='all';
     resetFilterChips(); renderEvents();
     setTimeout(()=>{ const rows=document.querySelectorAll('#events-tbody tr'); if(rows.length){ const ce=rows[rows.length-1].querySelector('[contenteditable]'); if(ce)ce.focus(); } },50);
   } catch(e) { showToast('Could not add row: '+e.message,true); }
@@ -955,13 +892,13 @@ async function deleteRow(id) {
 
 // ─── FILTERS ─────────────────────────────────────────────────────────────────
 function setFilter(dim, val, sel) {
-  if(dim==='day') filterDay=val; else if(dim==='person') filterPerson=val; else filterType=val;
+  if(dim==='day') filterDay=val; else if(dim==='person') filterPerson=val; else if(dim==='type') filterType=val; else if(dim==='approval') filterApproval=val;
   sel.classList.toggle('active', val !== 'all');
   renderEvents();   // also calls renderCalendar internally
   renderTravel();
 }
 function resetFilterChips() {
-  ['filter-day','filter-person','filter-type'].forEach(id => {
+  ['filter-day','filter-person','filter-type','filter-approval'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.value = 'all'; el.classList.remove('active'); }
   });
@@ -1091,10 +1028,6 @@ function renderResources() {
   const grid = document.getElementById('resources-grid');
   grid.innerHTML = '';
   resources.forEach(r => {
-    const attHtml = PEOPLE.filter(p => !p.isClient).map(p => {
-      const on = r.attendees.includes(p.key);
-      return `<span class="att-circle att-${p.key}${on?'':' off'}" title="${p.label}" onclick="toggleResourceAtt('${r.id}','${p.key}')">${p.initials}</span>`;
-    }).join('');
     const wrap = document.createElement('div');
     wrap.className = 'resource-card-wrap';
     wrap.innerHTML = `
@@ -1102,26 +1035,10 @@ function renderResources() {
         <div class="resource-icon">${r.icon}</div>
         <div><h4>${escHtml(r.name)}</h4><p>${escHtml(r.desc)}</p></div>
       </a>
-      <div class="resource-att-row">${attHtml}</div>
       <button class="resource-del" onclick="deleteResource('${r.id}')" title="Remove">×</button>
     `;
     grid.appendChild(wrap);
   });
-}
-
-async function toggleResourceAtt(id, personKey) {
-  const r = resources.find(r=>r.id===id);
-  if (!r) return;
-  if (r.attendees.includes(personKey)) {
-    r.attendees = r.attendees.filter(k=>k!==personKey);
-  } else {
-    r.attendees.push(personKey);
-  }
-  renderResources();
-  if (id && !String(id).startsWith('default-')) {
-    try { await atReq('Resources','PATCH',{fields:{Attendees:r.attendees.join(',')}},id); }
-    catch(e) { showToast('Save failed',true); }
-  }
 }
 
 async function deleteResource(id) {
@@ -1154,66 +1071,6 @@ async function addResource() {
     toggleAddResource();
   } catch(e) { showToast('Could not add resource: '+e.message,true); }
   finally { showLoading(false); }
-}
-
-// ─── EVENT EDIT MODAL ────────────────────────────────────────────────────────
-let _modalEventId = null;
-
-function openEventModal(id) {
-  const ev = events.find(e=>e.id===id);
-  if (!ev) return;
-  _modalEventId = id;
-
-  document.getElementById('em-name-display').textContent = ev.name || 'Untitled Event';
-  document.getElementById('em-name').value     = ev.name;
-  document.getElementById('em-time').value     = ev.time;
-  document.getElementById('em-location').value = ev.location;
-  document.getElementById('em-notes').value    = ev.notes;
-
-  const daySel = document.getElementById('em-day');
-  daySel.innerHTML = DAYS.map(d=>`<option${ev.day===d?' selected':''}>${d}</option>`).join('');
-
-  const typeSel = document.getElementById('em-type');
-  typeSel.innerHTML = TYPES.map(t=>`<option${ev.type===t?' selected':''}>${t}</option>`).join('');
-
-  const priSel = document.getElementById('em-priority');
-  priSel.innerHTML = PRIORITIES.map(p=>`<option${ev.priority===p?' selected':''}>${p}</option>`).join('');
-
-  const staSel = document.getElementById('em-status');
-  staSel.innerHTML = STATUSES.map(s=>`<option${ev.status===s?' selected':''}>${s}</option>`).join('');
-
-  const attRow = document.getElementById('em-att-row');
-  attRow.innerHTML = PEOPLE.map(p => {
-    const on = ev.attendees.includes(p.key);
-    return `<span class="att-circle att-${p.key}${on?'':' off'}" title="${p.label}" onclick="emToggleAtt('${p.key}',this)">${p.initials}</span>`;
-  }).join('');
-
-  document.getElementById('event-modal-backdrop').classList.add('open');
-  setTimeout(()=>document.getElementById('em-name').focus(), 50);
-}
-
-function closeEventModal(e) {
-  if (e && e.target !== document.getElementById('event-modal-backdrop')) return;
-  document.getElementById('event-modal-backdrop').classList.remove('open');
-  _modalEventId = null;
-}
-
-function emFieldChange(field, val) {
-  if (!_modalEventId) return;
-  if (field === 'name') document.getElementById('em-name-display').textContent = val || 'Untitled Event';
-  updateField(_modalEventId, field, val);
-}
-
-async function emToggleAtt(key, el) {
-  if (!_modalEventId) return;
-  const ev = events.find(e=>e.id===_modalEventId);
-  if (!ev) return;
-  const i = ev.attendees.indexOf(key);
-  if (i===-1) ev.attendees.push(key); else ev.attendees.splice(i,1);
-  el.classList.toggle('off');
-  try { await atReq('Events','PATCH',{fields:{Attendees:ev.attendees.join(',')}},_modalEventId); }
-  catch(e) { showToast('Save failed',true); }
-  renderEvents();
 }
 
 // ─── CALENDAR ────────────────────────────────────────────────────────────────
@@ -1279,12 +1136,10 @@ function renderCalendar() {
         const dots = ev.attendees.map(k=>`<span class="cal-att-dot" style="background:${PERSON_COLORS[k]||'#ccc'}" title="${PEOPLE.find(p=>p.key===k)?.label||k}">${PERSON_INITIALS[k]||'?'}</span>`).join('');
         const c = document.createElement('div');
         c.className = `cal-event-card ${PRIORITY_CLASS[ev.priority]||'p-radar'}`;
-        c.style.cursor = 'pointer';
         c.innerHTML = `<div class="cal-event-name">${escHtml(ev.name)||'<em style="color:#ccc">Untitled</em>'}</div>
           ${ev.time?`<div class="cal-event-time">${escHtml(ev.time)}</div>`:''}
           <div class="cal-event-type">${escHtml(ev.type)}</div>
           <div class="cal-att-dots">${dots}</div>`;
-        c.addEventListener('click', () => openEventModal(ev.id));
         col.appendChild(c);
       });
     }
@@ -1311,7 +1166,8 @@ function doLogin() {
     document.getElementById('login-overlay').classList.add('hidden');
     err.textContent = '';
     input.classList.remove('error');
-    loadAll();
+    setupAirtableFields();
+    loadAll().then(() => seedSportBeach().then(() => seedSportBeachV2()));
   } else {
     input.classList.add('error');
     err.textContent = 'Incorrect password. Try again.';
@@ -1320,10 +1176,164 @@ function doLogin() {
   }
 }
 
+// ─── AIRTABLE FIELD SETUP ────────────────────────────────────────────────────
+async function setupAirtableFields() {
+  if (localStorage.getItem('nrg_fields_v1')) return;
+  try {
+    const meta = await fetch(`https://api.airtable.com/v0/meta/bases/${AT_BASE}/tables`, {
+      headers: { 'Authorization': `Bearer ${AT_TOKEN}` }
+    }).then(r => r.json());
+    const evTable = meta.tables?.find(t => t.name === 'Events');
+    if (!evTable) return;
+    const hasApproval = evTable.fields?.some(f => f.name === 'Approval');
+    if (!hasApproval) {
+      await fetch(`https://api.airtable.com/v0/meta/bases/${AT_BASE}/tables/${evTable.id}/fields`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${AT_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: 'Approval', type: 'checkbox', options: { icon: 'check', color: 'redBright' } })
+      });
+    }
+    localStorage.setItem('nrg_fields_v1', '1');
+  } catch(e) { /* silently fail — field may already exist */ }
+}
+
+// ─── SPORT BEACH SEED ────────────────────────────────────────────────────────
+const SB_SEED_KEY    = 'nrg_sb_seeded_v1';
+const SB_SEED_KEY_V2 = 'nrg_sb_seeded_v2';
+
+const SB_EVENTS = [
+  // ── MONDAY JUNE 22 ──────────────────────────────────────────────────────────
+  {Name:'Run Club',Day:'Mon Jun 22',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Angela Manuel Davis (World-class Motivational Coach)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Strength Club',Day:'Mon Jun 22',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Ron "Boss" Everline (Celebrity Trainer & Entrepreneur)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Swim Club',Day:'Mon Jun 22',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Vesi Angelova (Award-Winning Creative Director & Global Triathlete)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Flipping the Playbook for Modern Communications',Day:'Mon Jun 22',Time:'8:00 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Roundtable presented by Allison Worldwide',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Assist: How Mentorship Fuels Enduring Leadership',Day:'Mon Jun 22',Time:'11:30 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Roundtable presented by New York Life · Alex Rodriguez (Chairman & CEO, A-Rod Corp)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Why We Still Sponsor Things: The New Value of Sports Investment',Day:'Mon Jun 22',Time:'12:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Kory Marchisotto (President, e.l.f. Brands), Kenny Mitchell (CMO, Levi Strauss & Co) +2 speakers',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'From Passive to Participant: The New Rules of Fan Engagement',Day:'Mon Jun 22',Time:'3:00 PM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Roundtable by EA Sports · Andrea Hopelain (GM & SVP Marketing, EA Sports) — requires admin approval',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  {Name:'SPORT BEACH Open Play',Day:'Mon Jun 22',Time:'4:00 PM',Type:'Sport Beach',Location:'Court',Notes:'',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'From the Edges to the Center: How Niche Sports Build the Culture Mainstream Follows',Day:'Mon Jun 22',Time:'4:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Sky Brown (2x Olympic Medalist & World Champion), Miles Chamley-Watson (Olympian, Founder World Fencing League)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  // ── TUESDAY JUNE 23 ─────────────────────────────────────────────────────────
+  {Name:'Strength Club',Day:'Tue Jun 23',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Ron "Boss" Everline (Celebrity Trainer & Entrepreneur)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Strava Run Club',Day:'Tue Jun 23',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Requires administrator approval',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  {Name:'Swim Club',Day:'Tue Jun 23',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Vesi Angelova (Award-Winning Creative Director & Global Triathlete)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Athletes as Co-Creators: Shaping Style, Identity, and Cultural Influence Together',Day:'Tue Jun 23',Time:'8:30 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Roundtable by Glance by InMobi — requires admin approval',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  {Name:'Business Insider CMO Breakfast',Day:'Tue Jun 23',Time:'9:00 AM',Type:'Networking',Location:'Court',Notes:'Invite Only — requires admin approval',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  {Name:"The Premium Placement You're Not Using",Day:'Tue Jun 23',Time:'11:30 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Roundtable by The Trade Desk · Elle Duncan (Lead sports host, Netflix) — requires admin approval',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  {Name:'Meeting the Moment: Confidence, Culture, and the New Performance Playbook',Day:'Tue Jun 23',Time:'2:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:"Blanca Juti (CCO, L'Oréal Groupe), Noah Lyles (2024 Olympic 100m Champion) +1 speaker",Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The "You\'ve Made It" Moment',Day:'Tue Jun 23',Time:'2:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Moira Forbes (EVP, Forbes), Mark Kirkham (CMO, PepsiCo Beverages US) +1 speaker',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Building the World, Not Just the Win',Day:'Tue Jun 23',Time:'3:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Taylor Montgomery (Global Chief Brand Officer, Taco Bell), Megan Rapinoe (Soccer Champion, Olympic Gold Medalist) +1 speaker',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Next Billion Fan Sport',Day:'Tue Jun 23',Time:'3:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Connor Pardoe (CEO, Carvana PPA Tour / Pickleball Inc.), Bex Smith (Founder & CEO, Crux Football) +2 speakers',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'SPORT BEACH Open Play',Day:'Tue Jun 23',Time:'4:30 PM',Type:'Sport Beach',Location:'Court',Notes:'',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'72andSunny Dinner',Day:'Tue Jun 23',Time:'7:00 PM',Type:'Dinner',Location:'Court',Notes:'Invite Only',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  // ── WEDNESDAY JUNE 24 ───────────────────────────────────────────────────────
+  {Name:'Run Club',Day:'Wed Jun 24',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Angela Manuel Davis (World-class Motivational Coach)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Strength Club',Day:'Wed Jun 24',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Ron "Boss" Everline (Celebrity Trainer & Entrepreneur)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Swim Club',Day:'Wed Jun 24',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:'Hosted by Sweatwork · Vesi Angelova (Award-Winning Creative Director & Global Triathlete)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Investing in the Future of Women\'s Sports',Day:'Wed Jun 24',Time:'9:30 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Roundtable presented by Scripps — requires admin approval',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+  {Name:'From Fairway to Fast Lane: How Brands and Athletes Extend Across Sports',Day:'Wed Jun 24',Time:'12:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Louise McEwen (CMO, McLaren Racing), Lando Norris (Driver, McLaren Mastercard Formula 1 Team)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Talent Is the Brand: Creating Lasting Conversations',Day:'Wed Jun 24',Time:'12:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Kevin Durant (2x NBA Champion, Co-Founder Boardroom), Rich Kleiman (CEO & Co-Founder, Boardroom) +1 speaker',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'SPORT BEACH Open Play',Day:'Wed Jun 24',Time:'4:00 PM',Type:'Sport Beach',Location:'Court',Notes:'',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  // ── THURSDAY JUNE 25 ────────────────────────────────────────────────────────
+  {Name:'The Cool Down',Day:'Thu Jun 25',Time:'7:00 AM',Type:'Sport Beach',Location:'Court',Notes:"Hosted by Sweatwork · Ron \"Boss\" Everline & Angela Manuel Davis",Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Wearables, Meet Shareables: The Intersection of Tech and Community',Day:'Thu Jun 25',Time:'12:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Jen Rapp (CCO, Superside), Doug Sweeny (CMO, Oura) +2 speakers',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Invite Only Event',Day:'Thu Jun 25',Time:'3:00 PM',Type:'Other',Location:'Court',Notes:'Invite Only',Priority:'On the Radar',Status:'Not Yet Open',Attendees:''},
+];
+
+// ─── SPORT BEACH SEED V2 (new events from Agency Planning Deep Dive) ─────────
+const SB_EVENTS_V2 = [
+  // ── SUNDAY JUNE 21 ──────────────────────────────────────────────────────────
+  {Name:'Scheduled Walk Throughs',Day:'Sun Jun 21',Time:'10:00 AM',Type:'Sport Beach',Location:'Sport Beach',Notes:'Soft open / badge pickup. Scheduled walk throughs only.',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Stagwell Agencies Soft Open',Day:'Sun Jun 21',Time:'5:00 PM',Type:'Networking',Location:'Sport Beach',Notes:'Stagwell Agencies preview hour',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Friends and Family',Day:'Sun Jun 21',Time:'6:00 PM',Type:'Networking',Location:'Sport Beach',Notes:'Friends and Family soft open',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  // ── MONDAY JUNE 22 (new panels) ─────────────────────────────────────────────
+  {Name:'Coaches Corner: A High Performance Coaching Workshop',Day:'Mon Jun 22',Time:'9:00 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Breakfast hosted by Indeed · Accepting requests',Priority:'On the Radar',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'First Touch to Final Whistle: Global Brands Meet America\'s World Cup',Day:'Mon Jun 22',Time:'11:00 AM',Type:'Panel/Session',Location:'Main Stage',Notes:'Daniel Sturidge (Liverpool Legend), Pedro Pina (YouTube), Rick Pineda (Diageo), Cristian Racioppi (Channel Factory), Ben James (CIO, GALE, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Coach Who? The Women Shaping Leadership Across Sports',Day:'Mon Jun 22',Time:'11:30 AM',Type:'Panel/Session',Location:'Main Stage',Notes:'Candace Parker (WNBA Legend), Carolyn Braff (Gatorade), Sarah Spain (iHeart Women\'s Sports), Julie Jensen (Jasper Advisors, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Ownership Revolution: Building Cultural Equity with NBPA',Day:'Mon Jun 22',Time:'12:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Jaylen Brown, David Kelly, Trey Murphy III, Fred VanVleet (all NBPA), Taylor Rooks (Sports Broadcaster, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'THE HANG fueled by Gatorade — What\'s Next for Women\'s Sports Media with Sue Bird',Day:'Mon Jun 22',Time:'12:00 PM',Type:'Networking',Location:"Owner's Suite",Notes:'Accepting requests · Sue Bird (WNBA Champion)',Priority:'High Priority',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'The Fan Equation: Decoding Behavior in the Data Economy',Day:'Mon Jun 22',Time:'1:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Damar Hamlin (NFL), Dan Gardner (Code and Theory), Edwin Wong (Uber Ads), Matt Spiegel (TransUnion)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Borderless Fandom: Expanding Sport Through Music',Day:'Mon Jun 22',Time:'1:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Scotty James (Snowboarder), Don McGuire (Qualcomm), Rob Christensen (Vevo), Kevin Chernett (Live Nation)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Mentor Behind the Power Player',Day:'Mon Jun 22',Time:'2:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Alex Rodriguez (ARod Corp.), Amy Hu (New York Life), Maggie Malek (Crispin, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'How the Brands Behind Youth Sports Are Building the Next Generation of Fans',Day:'Mon Jun 22',Time:'2:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Diana Taurasi (Former WNBA), Emily Silver (Dick\'s Sporting Goods), Vinny Rinaldi (Hershey), Jess Henrichs (Colle McVoy, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Game On: How Gaming Became Sport\'s Most Powerful Media Channel',Day:'Mon Jun 22',Time:'3:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Emily Ketchum (Lenovo), Indy Khabra (Livewire), Naveen Tewari (InMobi)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Business Case for Athlete Advocacy',Day:'Mon Jun 22',Time:'3:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'CC Sabathia (MLB Veteran), Kelly Mahoney (Ulta), Marcela Melero (Dove)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'VIP Happy Hour',Day:'Mon Jun 22',Time:'4:30 PM',Type:'Networking',Location:'A Deck',Notes:'VIP Happy Hour + Open Play on Court',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'1 on 1 Evening with SPORT BEACH',Day:'Mon Jun 22',Time:'7:30 PM',Type:'Dinner',Location:'Court/Sand',Notes:'VIP dinner — guest list managed by SPORT BEACH',Priority:'High Priority',Status:'Not Yet Open',Attendees:'',Approval:true},
+  // ── TUESDAY JUNE 23 (new panels) ────────────────────────────────────────────
+  {Name:'More Than a Moment: How Eli Lilly and Shaq Built a Partnership That Lasts',Day:'Tue Jun 23',Time:'12:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Shaquille O\'Neal (NBA Champion), Lina Polimeni (Eli Lilly)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Redefining Luxury for the Modern Athlete',Day:'Tue Jun 23',Time:'12:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Tony Capuano (Marriott), Meredith Kopit Levin (NYT), Eric Sheinkop (DesireCo, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Business, Brands, and Ball: How Athletes and Brands Are Powering the Next Wave of Fandom',Day:'Tue Jun 23',Time:'1:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Chris Paul (NBA All-Star), Lara Balazs (Adobe), Sue Bird (WNBA Champion), Damaune Journey (72andSunny, mod)',Priority:'High Priority',Status:'No Registration Required',Attendees:''},
+  {Name:'Built From the Back: How the Greatest Comebacks in Sport Become the Greatest Brand Stories',Day:'Tue Jun 23',Time:'1:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Lindsey Vonn (Olympic Champion), Karen Kovacs (NBCU), Colin Jost (SNL, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'THE HANG fueled by Gatorade — Authenticity and Brand Growth with Megan Rapinoe',Day:'Tue Jun 23',Time:'12:00 PM',Type:'Networking',Location:"Owner's Suite",Notes:'Accepting requests · Megan Rapinoe (Olympic Champion)',Priority:'High Priority',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'Creators Are Moving Culture, Is Your Spend Keeping Up?',Day:'Tue Jun 23',Time:'3:00 PM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Roundtable hosted by Comscore · Accepting Retail, Fashion, Health, Travel, CPG, F&B, FinServ VIPs',Priority:'On the Radar',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'A Pretty Tough Chat with Maria Sharapova, Susie Wolff, and Jessica Stacey',Day:'Tue Jun 23',Time:'4:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Maria Sharapova (5x Grand Slam Champion), Jessica Stacey (Sephora), Susie Wolff (F1 Academy), Marissa Dacay (Adobe, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'72andSunny Friends & Family Dinner',Day:'Tue Jun 23',Time:'7:30 PM',Type:'Dinner',Location:'Court/Sand',Notes:'VIP dinner — guest list managed by 72andSunny',Priority:'High Priority',Status:'Not Yet Open',Attendees:'',Approval:true},
+  // ── WEDNESDAY JUNE 24 (new panels) ──────────────────────────────────────────
+  {Name:'Outfront Breakfast',Day:'Wed Jun 24',Time:'10:00 AM',Type:'Networking',Location:"Owner's Suite",Notes:'Closed',Priority:'On the Radar',Status:'Closed / Full',Attendees:'',Approval:true},
+  {Name:'THE HANG fueled by Gatorade — Shepherding a Growing Sport with Sue Bird',Day:'Wed Jun 24',Time:'12:00 PM',Type:'Networking',Location:"Owner's Suite",Notes:'Accepting requests · Sue Bird (WNBA Champion)',Priority:'High Priority',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'Carlos Sainz x Williams F1',Day:'Wed Jun 24',Time:'1:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Carlos Sainz (Williams F1), Peter Kenyon (Williams F1)',Priority:'High Priority',Status:'No Registration Required',Attendees:''},
+  {Name:'The New Playbook: Women\'s Sports as a Scaled Business',Day:'Wed Jun 24',Time:'1:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Tara Davis-Woodhall (Olympic Champion), Kayla Green (Athlos), Colie Edison (WNBA)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'How to Cultivate a Winning Team Culture',Day:'Wed Jun 24',Time:'2:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Jaxon Smith-Njigba (NFL Player), Tim Ellis (NFL), Glenn Cole (72andSunny)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Feed is the Field',Day:'Wed Jun 24',Time:'2:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Alex Rodriguez (ARod Corp.), Uzma Rawn Dowler (MLB), Rollo Goldstaub (TikTok), Taylor Rooks (Sports Broadcaster, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Welcome to Tee Time: The Cultural Unlocking of Golf',Day:'Wed Jun 24',Time:'3:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Ken Griffey Jr. (MLB Hall of Famer), Michael Collins (Golf Analyst), Ann Marie Nelson (YouTube), Daniel Sattelmeyer (Bark Bark, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'The Attention Economy of Real Life',Day:'Wed Jun 24',Time:'3:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Ravi Kandikonda (Zillow), Anmol Malhotra (Snap Inc.), Fotoulla Damaskos (NRG, mod) ⭐ FOTOULLA MODERATING',Priority:'Must Attend',Status:'No Registration Required',Attendees:'fotoulla'},
+  {Name:'Religion of Sports',Day:'Wed Jun 24',Time:'4:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Religion of Sports',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Made in America — How LA28 Is Rewriting the Rules of Sports Marketing',Day:'Wed Jun 24',Time:'4:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Shaun White (3x Olympic Champion), Mark Marshall (NBCU), Carla Hassan (JPMC)',Priority:'High Priority',Status:'No Registration Required',Attendees:''},
+  {Name:'TMRW Sports Roundtable',Day:'Wed Jun 24',Time:'3:00 PM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Roundtable with TMRW Sports · Accepting requests',Priority:'On the Radar',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'VIP Happy Hour',Day:'Wed Jun 24',Time:'4:30 PM',Type:'Networking',Location:'A Deck',Notes:'VIP Happy Hour',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'World Cup Watch Party with YouTube',Day:'Wed Jun 24',Time:'8:30 PM',Type:'Party/Social',Location:'Court/Sand',Notes:'Guest list managed by SPORT BEACH · More inclusive event',Priority:'High Priority',Status:'Not Yet Open',Attendees:'',Approval:true},
+  // ── THURSDAY JUNE 25 (new panels) ───────────────────────────────────────────
+  {Name:'Beyond Live Sports: Creator TV and The New Attention Era',Day:'Thu Jun 25',Time:'10:00 AM',Type:'Panel/Session',Location:"Owner's Suite",Notes:'Executive Breakfast hosted by Spotter · Accepting requests',Priority:'On the Radar',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'Wicked Good: How Boston Became the Blueprint for a Sports City',Day:'Thu Jun 25',Time:'11:00 AM',Type:'Panel/Session',Location:'Main Stage',Notes:'David Ortiz (Former MLB), Ryan Fischer (FSG), Michele Barlow (Bank of America), Jack Fleming (Boston Athletic Assoc.)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'All In: What the Smartest Investors See in Sport',Day:'Thu Jun 25',Time:'11:30 AM',Type:'Panel/Session',Location:'Main Stage',Notes:'Erica Kerner (Standard Chartered), Dan Thomas (FT, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'More Than Merch: How Licensed Apparel Became a Language for Global Fandom',Day:'Thu Jun 25',Time:'12:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Jayson Tatum (NBA Champion), Jeremi Gorman (Fanatics), Daniel-Yaw Miller (OffBall, mod)',Priority:'High Priority',Status:'No Registration Required',Attendees:''},
+  {Name:'The Live Internet: Sports, News and the Attention Economy',Day:'Thu Jun 25',Time:'1:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Mark Penn (Stagwell), Mike Reed (USA Today), Ilyse Liffreing (The Current, mod)',Priority:'High Priority',Status:'No Registration Required',Attendees:''},
+  {Name:'NIL\'s Five-Year Anniversary: Lessons from the Shifting College Sports Landscape',Day:'Thu Jun 25',Time:'1:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Athlete TBC, Andrea Zaretsky (E*Trade), Rachel Baker (Duke), Evin Shutt (72andSunny, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'Earn Your Place or Buy Your Space: Authentic is the Most Expensive Word in Sport',Day:'Thu Jun 25',Time:'2:00 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Hilary Knight (5x Olympic Champion), Jeff Cha (Visa), Erin Silvoy (Starbucks), Karina Wilsher (Anomaly, mod)',Priority:'On the Radar',Status:'No Registration Required',Attendees:''},
+  {Name:'THE HANG fueled by Gatorade — A Closing Conversation & Afternoon Spritz with Megan Rapinoe',Day:'Thu Jun 25',Time:'2:00 PM',Type:'Networking',Location:"Owner's Suite",Notes:'Accepting requests · Megan Rapinoe (Olympic Champion)',Priority:'High Priority',Status:'Registration Open',Attendees:'',Approval:true},
+  {Name:'Then vs. Now: How Social Media Rewrote the Athlete Playbook',Day:'Thu Jun 25',Time:'2:30 PM',Type:'Panel/Session',Location:'Main Stage',Notes:'Carmelo Anthony (Hall of Famer), Cooper Flagg (NBA Player), Elle Duncan (Netflix)',Priority:'High Priority',Status:'No Registration Required',Attendees:''},
+  {Name:'Wrap Party',Day:'Thu Jun 25',Time:'5:00 PM',Type:'Party/Social',Location:'Court/Sand',Notes:'Closing wrap party — guest list managed by SPORT BEACH, more inclusive',Priority:'High Priority',Status:'Not Yet Open',Attendees:'',Approval:true},
+];
+
+async function seedSportBeachV2() {
+  if (localStorage.getItem(SB_SEED_KEY_V2)) return;
+  try {
+    showToast('Adding new Sport Beach programming…');
+    const chunks = [];
+    for (let i = 0; i < SB_EVENTS_V2.length; i += 10) chunks.push(SB_EVENTS_V2.slice(i, i + 10));
+    for (const chunk of chunks) {
+      await atReq('Events', 'POST', { records: chunk.map(f => ({ fields: f })) });
+    }
+    localStorage.setItem(SB_SEED_KEY_V2, '1');
+    showToast('New programming added! (' + SB_EVENTS_V2.length + ' events)');
+    await loadAll(true);
+  } catch(e) {
+    showToast('Could not add new events: ' + e.message, true);
+  }
+}
+
+async function seedSportBeach() {
+  if (localStorage.getItem(SB_SEED_KEY)) return; // already seeded
+  try {
+    showToast('Adding Sport Beach schedule…');
+    const chunks = [];
+    for (let i = 0; i < SB_EVENTS.length; i += 10) chunks.push(SB_EVENTS.slice(i, i + 10));
+    for (const chunk of chunks) {
+      await atReq('Events', 'POST', { records: chunk.map(f => ({ fields: f })) });
+    }
+    localStorage.setItem(SB_SEED_KEY, '1');
+    showToast('Sport Beach schedule added! (' + SB_EVENTS.length + ' events)');
+    await loadAll(true);
+  } catch(e) {
+    showToast('Could not seed Sport Beach events: ' + e.message, true);
+  }
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 if (localStorage.getItem(AUTH_KEY) === '1') {
   document.getElementById('login-overlay').classList.add('hidden');
-  loadAll();
+  setupAirtableFields();
+  loadAll().then(() => seedSportBeach().then(() => seedSportBeachV2()));
 } else {
   document.getElementById('login-input').focus();
 }
