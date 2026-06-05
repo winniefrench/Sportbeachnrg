@@ -870,14 +870,14 @@ async function toggleApproval(id, el) {
   el.title = ev.approval ? 'Click to mark as unrestricted' : 'Click to mark as approval needed';
   el.textContent = ev.approval ? 'Approval Needed' : 'Unrestricted';
   try { await atReq('Events', 'PATCH', { fields: { Approval: ev.approval } }, id); }
-  catch(e) { showToast('Save failed', true); }
+  catch(e) { showToast('Could not save — make sure an "Approval" checkbox field exists in Airtable', true); }
   renderEvents();
 }
 
 async function addRow() {
   showLoading(true);
   try {
-    const res = await atReq('Events','POST',{fields:{Name:'',Day:'Mon Jun 22',Time:'',Type:'Panel/Session',Attendees:'',Priority:'On the Radar',Status:'Not Yet Open',Location:'',Notes:'',Approval:false}});
+    const res = await atReq('Events','POST',{fields:{Name:'',Day:'Mon Jun 22',Time:'',Type:'Panel/Session',Attendees:'',Priority:'On the Radar',Status:'Not Yet Open',Location:'',Notes:''}});
     events.push({id:res.id,name:'',day:'Mon Jun 22',time:'',type:'Panel/Session',attendees:[],priority:'On the Radar',status:'Not Yet Open',location:'',notes:'',approval:false});
     filterDay='all'; filterPerson='all'; filterType='all'; filterApproval='all';
     resetFilterChips(); renderEvents();
