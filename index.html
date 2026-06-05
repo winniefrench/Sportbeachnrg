@@ -660,6 +660,14 @@ async function atReq(table, method, body, recordId) {
   return res.json();
 }
 
+async function atBulkDelete(table, ids) {
+  const params = ids.map(id => `records[]=${encodeURIComponent(id)}`).join('&');
+  const url = `${AT_URL}/${encodeURIComponent(table)}?${params}`;
+  const res = await fetch(url, { method: 'DELETE', headers: { 'Authorization': `Bearer ${AT_TOKEN}` } });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error?.message || `HTTP ${res.status}`); }
+  return res.json();
+}
+
 async function atGetAll(table) {
   let all = [], offset;
   do {
@@ -1167,7 +1175,7 @@ function doLogin() {
     err.textContent = '';
     input.classList.remove('error');
     setupAirtableFields();
-    loadAll().then(() => seedSportBeach().then(() => seedSportBeachV2()));
+    loadAll().then(() => seedSportBeach()).then(() => seedSportBeachV2()).then(() => deduplicateEvents());
   } else {
     input.classList.add('error');
     err.textContent = 'Incorrect password. Try again.';
@@ -1297,6 +1305,7 @@ const SB_EVENTS_V2 = [
 
 async function seedSportBeachV2() {
   if (localStorage.getItem(SB_SEED_KEY_V2)) return;
+  localStorage.setItem(SB_SEED_KEY_V2, '1'); // set first to prevent re-runs even if seeding fails
   try {
     showToast('Adding new Sport Beach programming…');
     const chunks = [];
@@ -1304,7 +1313,6 @@ async function seedSportBeachV2() {
     for (const chunk of chunks) {
       await atReq('Events', 'POST', { records: chunk.map(f => ({ fields: f })) });
     }
-    localStorage.setItem(SB_SEED_KEY_V2, '1');
     showToast('New programming added! (' + SB_EVENTS_V2.length + ' events)');
     await loadAll(true);
   } catch(e) {
@@ -1312,8 +1320,32 @@ async function seedSportBeachV2() {
   }
 }
 
+async function deduplicateEvents() {
+  if (localStorage.getItem('nrg_dedup_v1')) return;
+  localStorage.setItem('nrg_dedup_v1', '1');
+  try {
+    const all = await atGetAll('Events');
+    const seen = {};
+    const toDelete = [];
+    all.forEach(r => {
+      const key = `${r.fields.Name||''}|${r.fields.Day||''}|${r.fields.Time||''}`;
+      if (seen[key]) { toDelete.push(r.id); } else { seen[key] = true; }
+    });
+    if (toDelete.length === 0) return;
+    showToast(`Removing ${toDelete.length} duplicate events…`);
+    const chunks = [];
+    for (let i = 0; i < toDelete.length; i += 10) chunks.push(toDelete.slice(i, i + 10));
+    for (const chunk of chunks) { await atBulkDelete('Events', chunk); }
+    showToast(`Cleaned up ${toDelete.length} duplicates`);
+    await loadAll(true);
+  } catch(e) {
+    showToast('Dedup failed: ' + e.message, true);
+  }
+}
+
 async function seedSportBeach() {
-  if (localStorage.getItem(SB_SEED_KEY)) return; // already seeded
+  if (localStorage.getItem(SB_SEED_KEY)) return;
+  localStorage.setItem(SB_SEED_KEY, '1'); // set first to prevent re-runs even if seeding fails
   try {
     showToast('Adding Sport Beach schedule…');
     const chunks = [];
@@ -1321,7 +1353,6 @@ async function seedSportBeach() {
     for (const chunk of chunks) {
       await atReq('Events', 'POST', { records: chunk.map(f => ({ fields: f })) });
     }
-    localStorage.setItem(SB_SEED_KEY, '1');
     showToast('Sport Beach schedule added! (' + SB_EVENTS.length + ' events)');
     await loadAll(true);
   } catch(e) {
@@ -1333,7 +1364,7 @@ async function seedSportBeach() {
 if (localStorage.getItem(AUTH_KEY) === '1') {
   document.getElementById('login-overlay').classList.add('hidden');
   setupAirtableFields();
-  loadAll().then(() => seedSportBeach().then(() => seedSportBeachV2()));
+  loadAll().then(() => seedSportBeach()).then(() => seedSportBeachV2()).then(() => deduplicateEvents());
 } else {
   document.getElementById('login-input').focus();
 }
